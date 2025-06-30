@@ -1,0 +1,56 @@
+{% load static%}
+{% load tailwind_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+    {% tailwind_preload_css %}
+    {% tailwind_css %}
+
+</head>
+
+<body class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url({% static 'css/dist/3dblurred.png' %});">
+    <div class="min-h-screen flex items-center justify-center px-6 pt-14 lg:px-8">
+        <div class="flex flex-wrap justify-center mt-10">
+
+    <div class="p-4 max-w-xl">
+        <div class="flex rounded-lg h-full p-8 flex-col">
+            <div class="flex items-center mb-3">
+                <div
+                    class="w-auto h-8 mr-3 inline-flex items-center justify-center rounded-full dark:bg-indigo-500 bg-indigo-500 text-white flex-shrink-0">
+                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                </div>
+                <h2 class="text-white dark:text-white text-lg font-medium"><Strong>About Me</Strong></h2>
+            </div>
+            <div class="flex flex-col justify-between flex-grow">
+                <p class="leading-relaxed text-base text-white dark:text-gray-300">
+                    Hey everyone! I’m Arkadeep Ganguly, a third-year Computer Science student at <strong>MIT Manipal.</strong>
+I built this tool scraper during my internship at <strong>Keyline DigiTech Pvt. Ltd.</strong> as a hands-on project to automate business data extraction.<br><br>
+
+The tool is coded in Python, using modules like <strong>pyautogui</strong> and <strong>selenium</strong>, and even implements multithreading to speed things up. It’s designed to work specifically with Google Business Profile pages in India, based on the initial project requirements — but it’s scalable if needed in the future.<br><br>
+
+The only current limitation is bypassing CAPTCHAs, which requires residential proxies for rotating IPs — and those can get expensive.
+Apart from that, everything works smoothly.<br><br>
+
+If you’ve reached my site and have questions, feel free to get in touch — I’d love to hear your feedback or help you out.
+Thanks for checking it out!
+                </p>
+            </div>
+        </div>
+    </div>
+
+   
+
+</div>
+
+    </div>
+    </div>
+</body>
+
+</html>

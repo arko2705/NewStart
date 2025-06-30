@@ -1,0 +1,83 @@
+{%load static %}
+{% load tailwind_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+    {% tailwind_preload_css %}
+    {% tailwind_css %}
+
+</head>
+ <body class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url({% static 'css/dist/3dblurred.png' %});">
+  <div class=" min-h-screen flex items-center justify-center px-6 pt-14 lg:px-8">
+    <div class="w-full max-w-md p-6 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+      
+      <!-- Heading -->
+      <h5 class="mb-2 text-base font-semibold text-gray-900 md:text-xl dark:text-white">
+        What would you like to search?
+      </h5>
+      <p class="mb-6 text-sm font-normal text-gray-500 dark:text-gray-400">
+        Choose how you want to explore company information.
+      </p>
+      
+      <!-- Options List -->
+      <ul class="space-y-4">
+        <!-- General Search -->
+        <li>
+          <a href="\query"
+             class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
+            <div class="flex items-center">
+              <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8 4a4 4 0 014 4v1h1a1 1 0 110 2h-1v1a4 4 0 11-8 0v-1H4a1 1 0 110-2h1V8a4 4 0 014-4z"/>
+              </svg>
+              <span class="ml-3 text-gray-900 dark:text-white">
+             <strong>General Search</strong>-Explore all available info across companies
+              </span>
+            </div>
+          </a>
+        </li>
+
+        <!-- Customised Search -->
+        <li>
+          <a href="\query"
+             class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
+            <div class="flex items-center">
+              <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 3a1 1 0 000 2h3v2H4a1 1 0 100 2h3v2H4a1 1 0 100 2h3v1a1 1 0 102 0v-1h3a1 1 0 100-2H9v-2h3a1 1 0 100-2H9V5h3a1 1 0 100-2H4z"/>
+              </svg>
+              <span class="ml-3 text-gray-900 dark:text-white">
+                <strong>Customised Search</strong>-Get tailored insights from all companies
+              </span>
+            </div>
+          </a>
+        </li>
+
+        <!-- Single Company -->
+        <li>
+          <a href="\query"
+             class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
+            <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M6 2a2 2 0 00-2 2v12l4-2 4 2V4a2 2 0 00-2-2H6z"/>
+            </svg>
+            <span class="ml-3 text-gray-900 dark:text-white">
+              <strong>Single Company</strong>-Dive into one company’s full profile
+            </span>
+          </a>
+        </li>
+      </ul>
+
+      <!-- Footer Link -->
+      <div class="mt-6 text-center">
+        <a href="\Features"
+           class="text-xs font-normal text-gray-300 hover:underline dark:text-gray-400">
+          Go through these options
+        </a>
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>

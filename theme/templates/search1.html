@@ -1,0 +1,27 @@
+{%load static%}
+{% load tailwind_tags %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   
+    {% tailwind_preload_css %}
+    {% tailwind_css %}
+
+</head>
+<body class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url({% static 'css/dist/ddblurred.png' %});">
+  <div class="min-h-screen flex items-center justify-center px-6 pt-14 lg:px-8">
+    <div class="relative w-80 h-20">
+      <input type="text" placeholder="Enter your query..." class="w-full px-4 py-2 rounded-full focus:outline-white placeholder-white text-white outline-2 outline-white">
+     <a href="/your data is loading..."><button class="absolute right-0 top-0 mt-1 mr-2 bg-orange-500 text-white p-2 rounded-full hover:bg-black">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </button></a>
+    </div>
+  </div>
+</body>
+
+</html>
