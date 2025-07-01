@@ -26,6 +26,10 @@ def loading(response):
 def data(response):
     template=loader.get_template('display.html')
     return HttpResponse(template.render())
+def yes(request):
+    #yee=all.bruh()
+    return HttpResponse("yee")
+    
 
 
 
