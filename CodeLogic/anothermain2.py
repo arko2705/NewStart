@@ -1,10 +1,10 @@
 import time
-from GBP import Logic   #WOW
-from customthread import returningThread
+from CodeLogic.GBP import Logic   #WOW
+from CodeLogic.customthread import returningThread
 #didnt use beautiful soup,i used selenium cuz google maps is javascript rendered,beautiful soup and requests would haave given back a bs page
-def main():
+def main(a):
    logic=Logic()  ##need to make an instance first
-   link_list,your_query,loop_number=logic.link_generation()    ##gotta access a class's methods like this,how else
+   link_list,your_query,loop_number=logic.link_generation(a)    ##gotta access a class's methods like this,how else
    GBPdriver,emaildriver,ldriver=logic.InstanceProvider()
    GBPdriver.implicitly_wait(5)
    emaildriver.implicitly_wait(5)
@@ -43,11 +43,13 @@ def main():
         break
 
    print(element_list)
+
    end=time.time()
    print(f"{end-start} seconds taken")
    store_in_csv=input("Store in csv:Yes or no:\n")
    if store_in_csv.lower()=="yes":
        logic.csv_store(element_list,your_query)
+   return
   
 if __name__=='__main__':
     main()  

@@ -12,16 +12,36 @@
 
 </head>
 <body class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url({% static 'css/dist/ddblurred.png' %});">
-  <div class="min-h-screen flex items-center justify-center px-6 pt-14 lg:px-8">
-    <div class="relative w-80 h-20">
-      <input type="text" placeholder="Enter your query..." class="w-full px-4 py-2 rounded-full focus:outline-white placeholder-white text-white outline-2 outline-white">
-     <a href="/your data is loading..."><button class="absolute right-0 top-0 mt-1 mr-2 bg-orange-500 text-white p-2 rounded-full hover:bg-black">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-        </svg>
-      </button></a>
+  <div class="min-h-screen flex items-center justify-center px-6 pt-14 lg:px-8 ">
+    <div class="relative w-80 h-20 flex flex-col ">
+      <form method="GET" action="/your data is loading..."> 
+        <input type="text" name="loading" placeholder="Enter your query..." class="w-full px-4 py-2 rounded-full focus:outline-white placeholder-white text-white outline-2 outline-white">
+        <button type="submit" class="absolute right-0 top-0 mt-1 mr-2 bg-orange-500 text-white p-2 rounded-full hover:bg-black">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </button>
+      </form>
+      <form class="max-w-xs p-10">
+    <label for="counter-input" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Enter the number of companies you want:</label>
+    <div class="relative flex items-center">
+        <button type="button" id="decrement-button" data-input-counter-decrement="counter-input" class="shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+            <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 2">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h16"/>
+            </svg>
+        </button>
+        <input type="text" id="counter-input" data-input-counter class="shrink-0 text-gray-900 dark:text-white border-0 bg-transparent text-sm font-normal focus:outline-none focus:ring-0 max-w-[2.5rem] text-center" placeholder="" value="12" required />
+        <button type="button" id="increment-button" data-input-counter-increment="counter-input" class="shrink-0 bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 inline-flex items-center justify-center border border-gray-300 rounded-md h-5 w-5 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none">
+            <svg class="w-2.5 h-2.5 text-gray-900 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 1v16M1 9h16"/>
+            </svg>
+        </button>
+    </div>
+</form>
     </div>
   </div>
+  
+
 </body>
 
 </html>

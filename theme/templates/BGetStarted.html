@@ -26,49 +26,56 @@
       <!-- Options List -->
       <ul class="space-y-4">
         <!-- General Search -->
-        <li>
-          <a href="\query"
-             class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
-            <div class="flex items-center">
-              <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M8 4a4 4 0 014 4v1h1a1 1 0 110 2h-1v1a4 4 0 11-8 0v-1H4a1 1 0 110-2h1V8a4 4 0 014-4z"/>
-              </svg>
-              <span class="ml-3 text-gray-900 dark:text-white">
-             <strong>General Search</strong>-Explore all available info across companies
-              </span>
-            </div>
-          </a>
-        </li>
+<li>
+    <form action="/query" method="GET">
+      <button type="submit" name="User_Choice" value="OP-1"
+        class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
+        <div class="flex items-center">
+          <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M8 4a4 4 0 014 4v1h1a1 1 0 110 2h-1v1a4 4 0 11-8 0v-1H4a1 1 0 110-2h1V8a4 4 0 014-4z" />
+          </svg>
+          <span class="text-gray-900 dark:text-white">
+            <strong>General Search</strong> - Explore all available info across companies
+          </span>
+        </div>
+      </button>
+    </form>
+  </li>
 
-        <!-- Customised Search -->
-        <li>
-          <a href="\query"
-             class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
-            <div class="flex items-center">
-              <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M4 3a1 1 0 000 2h3v2H4a1 1 0 100 2h3v2H4a1 1 0 100 2h3v1a1 1 0 102 0v-1h3a1 1 0 100-2H9v-2h3a1 1 0 100-2H9V5h3a1 1 0 100-2H4z"/>
-              </svg>
-              <span class="ml-3 text-gray-900 dark:text-white">
-                <strong>Customised Search</strong>-Get tailored insights from all companies
-              </span>
-            </div>
-          </a>
-        </li>
+  <!-- Customised Search -->
+  <li>
+    <form action="/query" method="GET">
+      <button type="submit" name="User_Choice" value="OP-2"
+        class="w-full flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
+        <div class="flex items-center">
+          <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 3a1 1 0 000 2h3v2H4a1 1 0 100 2h3v2H4a1 1 0 100 2h3v1a1 1 0 102 0v-1h3a1 1 0 100-2H9v-2h3a1 1 0 100-2H9V5h3a1 1 0 100-2H4z" />
+          </svg>
+          <span class="ml-3 text-gray-900 dark:text-white">
+            <strong>Customised Search</strong> - Get tailored insights from all companies
+          </span>
+        </div>
+      </button>
+    </form>
+  </li>
+  
 
-        <!-- Single Company -->
-        <li>
-          <a href="\query"
-             class="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
-            <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
-              <path d="M6 2a2 2 0 00-2 2v12l4-2 4 2V4a2 2 0 00-2-2H6z"/>
-            </svg>
-            <span class="ml-3 text-gray-900 dark:text-white">
-              <strong>Single Company</strong>-Dive into one company’s full profile
-            </span>
-          </a>
-        </li>
-      </ul>
+  <!-- Single Company -->
+  <li>
+    <form action="/query" method="GET">
+      <button type="submit" name="User_Choice" value="OP-3"
+        class="w-full flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
+        <svg aria-hidden="true" class="h-5 w-5 text-gray-900 dark:text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M6 2a2 2 0 00-2 2v12l4-2 4 2V4a2 2 0 00-2-2H6z" />
+        </svg>
+        <span class="ml-3 text-gray-900 dark:text-white">
+          <strong>Single Company</strong> - Dive into one company’s full profile
+        </span>
+      </button>
+    </form>
+  </li>
 
+</ul>
       <!-- Footer Link -->
       <div class="mt-6 text-center">
         <a href="\Features"

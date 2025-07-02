@@ -1,5 +1,5 @@
 import undetected_chromedriver as udc
-import search as s
+import CodeLogic.search as s
 from selenium.webdriver.common.by import By
 import time
 import pyautogui
@@ -8,8 +8,8 @@ import random
 import csv
 
 class Logic:
-    def link_generation(self):##python automatically gives a positional arguement when we call it,so we must write "self"
-        googling_it,your_query=s.search()
+    def link_generation(self,a):##python automatically gives a positional arguement when we call it,so we must write "self"
+        googling_it,your_query=s.search(a)
         driver=udc.Chrome(version_main=137,use_subprocess=False)
         driver.get(googling_it)
         cond=True

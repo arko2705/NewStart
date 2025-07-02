@@ -1,10 +1,10 @@
 import time
-from GBP2 import Logic   #WOW
-from customthread import returningThread
+from CodeLogic.GBP2 import Logic   #WOW
+from CodeLogic.customthread import returningThread
 #didnt use beautiful soup,i used selenium cuz google maps is javascript rendered,beautiful soup and requests would haave given back a bs page
-def main():
+def main(a):
    logic=Logic()  ##need to make an instance first
-   link_list,your_query,loop_number,company_list=logic.link_generation()    ##gotta access a class's methods like this,how else
+   link_list,your_query,loop_number,company_list=logic.link_generation(a)    ##gotta access a class's methods like this,how else
    print("Enter which of the fields you would like:")
    print("1.E-mail 2.Linkedin 3.Address  4.Phone Number 5.Maplink 6.Website 7.Only Company\n Enter a number from 1-6")
    user_choices=logic.UserChoices()
@@ -74,6 +74,7 @@ def main():
    store_in_csv=input("Store in csv:Yes or no:\n")
    if store_in_csv.lower()=="yes":
        logic.csv_store(element_list,your_query,heading_list)
+   return
   
 if __name__=='__main__':
     main()  
