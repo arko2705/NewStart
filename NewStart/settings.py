@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'theme',
     'CodeLogic',
     'background_task',
+    
 ]
 TAILWIND_APP_NAME = 'theme'
 

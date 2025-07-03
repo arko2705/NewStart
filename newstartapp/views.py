@@ -4,6 +4,10 @@ from django.template import loader
 from background_task import background
 from CodeLogic import anothermain2
 from CodeLogic import anothermain1
+from django.db import models
+from .models import GBPInfo
+outcome=None 
+status=None
 def index(request):
     template=loader.get_template('index.html')
     return HttpResponse(template.render())
@@ -22,29 +26,41 @@ def ab(request):
 
 @background()
 def start1(a):
+    status="starting"
     print("starting 1st process")
-    anothermain2.main(a)
+    element_list=anothermain2.main(a)
     print("sort")
-    return
+    return 
+
 @background()
 def start2(a):
     print("starting 2nd process")
     anothermain1.main(a)
-    print("sort")
-    return
+    outcome="done"
+    return outcome
 
 def q(request):
     template=loader.get_template('Search1.html')
     global choice
+    context=None
     choice=request.GET.get("User_Choice")
-    return HttpResponse(template.render())
+    if choice=="OP-1":
+        context={
+            'option':choice
+        }
+    elif choice=="OP-2":
+        context={
+            'option':choice
+        }
+    return HttpResponse(template.render(context))
 
 def loading(request):
     template=loader.get_template('loader.html')
-    if choice=='OP-1':
+    GBPInfo.objects.all().delete()
+    if choice=='OP-1' and status !="starting":
         a=request.GET.get('loading')
         start1(a,repeat=None)
-
+        
     elif choice=='OP-2':
         a=request.GET.get('loading')
         start2(a,repeat=None)
@@ -53,9 +69,16 @@ def loading(request):
         pass
     return HttpResponse(template.render())
 
-def data(request):
+def datadisplay(request):
     template=loader.get_template('display.html')
-    return HttpResponse(template.render())
+    values=GBPInfo.objects.all().values()
+    context={
+        'headers':['Company','Address','Phone Number','Map-Link','Website','E-Mail','Linkedin'],
+        'values':values,
+        'outcome':outcome
+    }
+
+    return HttpResponse(template.render(context,request))
 
 
     

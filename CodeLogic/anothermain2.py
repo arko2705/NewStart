@@ -1,6 +1,7 @@
 import time
 from CodeLogic.GBP import Logic   #WOW
 from CodeLogic.customthread import returningThread
+from newstartapp.models import GBPInfo
 #didnt use beautiful soup,i used selenium cuz google maps is javascript rendered,beautiful soup and requests would haave given back a bs page
 def main(a):
    logic=Logic()  ##need to make an instance first
@@ -35,6 +36,7 @@ def main(a):
          Address,PhoneNumber=APT.join()
 
          element_list.append([Company,Address,PhoneNumber,i,Website,emaillist,linkedin])
+         GBPInfo(Company=Company,Address=Address,PhoneNumber=PhoneNumber,MapLink=i,Website=Website,Email=emaillist,Linkedin=linkedin).save()
          loop_count=loop_count+1
       else:
         GBPdriver.quit()
@@ -49,7 +51,7 @@ def main(a):
    store_in_csv=input("Store in csv:Yes or no:\n")
    if store_in_csv.lower()=="yes":
        logic.csv_store(element_list,your_query)
-   return
+   return element_list
   
 if __name__=='__main__':
     main()  
