@@ -9,3 +9,10 @@ class GBPInfo(models.Model):
     Website=models.CharField(blank=True,max_length=500)
     Email=models.CharField(blank=True,max_length=500)
     Linkedin=models.CharField(blank=True,max_length=500)
+    Stat=models.CharField(max_length=5)
+
+class TaskStatus(models.Model):
+    stat=models.CharField(max_length=10,default='rest')
+class Num(models.Model):
+    companynumber=models.IntegerField()
+

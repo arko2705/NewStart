@@ -1,11 +1,12 @@
 import time
 from CodeLogic.GBP import Logic   #WOW
 from CodeLogic.customthread import returningThread
-from newstartapp.models import GBPInfo
+from newstartapp.models import GBPInfo,Num
 #didnt use beautiful soup,i used selenium cuz google maps is javascript rendered,beautiful soup and requests would haave given back a bs page
 def main(a):
    logic=Logic()  ##need to make an instance first
-   link_list,your_query,loop_number=logic.link_generation(a)    ##gotta access a class's methods like this,how else
+   link_list,your_query,loop_number=logic.link_generation(a)   ##gotta access a class's methods like this,how else
+   Num(companynumber=loop_number).save()
    GBPdriver,emaildriver,ldriver=logic.InstanceProvider()
    GBPdriver.implicitly_wait(5)
    emaildriver.implicitly_wait(5)
@@ -36,14 +37,17 @@ def main(a):
          Address,PhoneNumber=APT.join()
 
          element_list.append([Company,Address,PhoneNumber,i,Website,emaillist,linkedin])
-         GBPInfo(Company=Company,Address=Address,PhoneNumber=PhoneNumber,MapLink=i,Website=Website,Email=emaillist,Linkedin=linkedin).save()
+         if loop_count==int(loop_number)-1:
+           GBPInfo(Company=Company,Address=Address,PhoneNumber=PhoneNumber,MapLink=i,Website=Website,Email=emaillist,Linkedin=linkedin,Stat="done").save()
+         else:
+            GBPInfo(Company=Company,Address=Address,PhoneNumber=PhoneNumber,MapLink=i,Website=Website,Email=emaillist,Linkedin=linkedin,Stat="None").save()
+
          loop_count=loop_count+1
       else:
         GBPdriver.quit()
         emaildriver.quit()
         ldriver.quit()
         break
-
    print(element_list)
 
    end=time.time()

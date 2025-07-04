@@ -14,7 +14,7 @@
 <body class="min-h-screen bg-cover bg-center bg-no-repeat" style="background-image: url({% static 'css/dist/ddblurred.png' %});">
   <div class="min-h-screen flex items-center justify-center px-6 pt-14 lg:px-8">
     <div class="relative w-80 flex flex-col">
-
+                                                             
       <!-- Unified Form Start -->
       <form method="GET" action="/your data is loading..." class="space-y-6">
 
@@ -46,11 +46,11 @@
     </div>
         </div>
 
-        {% if option == 'OP-2' %}
+        {% if option == 'OP-2'%}
         <div class="flex">
           <!-- Repeat block per checkbox -->
           <div class="pr-4 pt-4">
-            <input type="checkbox" id="email" name="fields" value="email" class="peer h-5 w-5 appearance-none rounded border border-slate-300 checked:bg-slate-800 checked:border-slate-800">
+            <input type="checkbox" id="email" name="fields" value="email" {% if box == 'only_company' %} disabled="disabled"{% endif %} class="peer h-5 w-5 appearance-none rounded border border-slate-300 checked:bg-slate-800 checked:border-slate-800">
             <label for="email" class="text-sm text-white">Email</label>
           </div>
           <div class="p-4">
@@ -73,11 +73,8 @@
             <input type="checkbox" id="website" name="fields" value="website" class="peer h-5 w-5 appearance-none rounded border border-slate-300 checked:bg-slate-800 checked:border-slate-800">
             <label for="website" class="text-sm text-white">Website</label>
           </div>
-          <div class="p-4">
-            <input type="checkbox" id="only-company" name="fields" value="only_company" class="peer h-5 w-5 appearance-none rounded border border-slate-300 checked:bg-slate-800 checked:border-slate-800">
-            <label for="only-company" class="text-sm text-white">Only Company</label>
-          </div>
-        </div>
+
+         
          {% endif %}
 
       </form>

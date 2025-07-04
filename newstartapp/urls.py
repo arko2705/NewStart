@@ -8,6 +8,8 @@ urlpatterns=[
     path('About/',views.ab,name="ab"),
     path('query/',views.q,name="q"),
     path('your data is loading.../',views.loading,name='loading'),
-    path('YourData/',views.datadisplay,name="datadisplay"),
+     path('YourData/',views.datadisplay,name="datadisplay"),
+     path('EnterNumber/',views.num,name="num")
+
     
 ]
