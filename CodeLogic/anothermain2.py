@@ -1,12 +1,26 @@
 import time
 from CodeLogic.GBP import Logic   #WOW
 from CodeLogic.customthread import returningThread
-from newstartapp.models import GBPInfo,Num
+from newstartapp.models import GBPInfo,Num,Num1
+logic=None
+link_list=None
+your_query=None
 #didnt use beautiful soup,i used selenium cuz google maps is javascript rendered,beautiful soup and requests would haave given back a bs page
 def main(a):
    logic=Logic()  ##need to make an instance first
-   link_list,your_query,loop_number=logic.link_generation(a)   ##gotta access a class's methods like this,how else
-   Num(companynumber=loop_number).save()
+   link_list,your_query=logic.link_generation(a)   ##gotta access a class's methods like this,how else
+   c=0
+   while True:
+      if Num1.objects.last():
+         break
+      else:
+           if c<5:
+             time.sleep(5) ##saving cpu power lmao
+
+           else:
+             time.sleep(1)
+           c=c+1
+
    GBPdriver,emaildriver,ldriver=logic.InstanceProvider()
    GBPdriver.implicitly_wait(5)
    emaildriver.implicitly_wait(5)
@@ -14,11 +28,11 @@ def main(a):
    start=time.time()
    loop_count=0
    element_list=[]
-   
+   loop_number=Num1.objects.last().limit
    
 
    for i in link_list:
-      if loop_count<int(loop_number):
+      if loop_count<loop_number:
          logic.link_getter(i,GBPdriver)
          CT=returningThread(target=logic.company,args=(i,GBPdriver))
          WT=returningThread(target=logic.website,args=(GBPdriver,))

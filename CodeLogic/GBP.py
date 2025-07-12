@@ -5,6 +5,7 @@ import time
 import pyautogui
 from seleniumbase import Driver
 import csv
+from newstartapp.models import Num
 
 class Logic:
   
@@ -28,9 +29,8 @@ class Logic:
                 link_list.append(i.get_attribute("href"))
         driver.quit()
         print(f"{len(link_list)} companies found.")
-        print("Enter the number of companies you would like to get the information for: ")
-        loop_number=input()
-        return link_list,your_query,loop_number
+        Num(companynumber=len(link_list)).save()
+        return link_list,your_query
        
     def InstanceProvider(self):
        GBPdriver=Driver(uc=True, headless=True,block_images=True)

@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class GBPInfo(models.Model):
+class GBPInfo(models.Model):  ##to display
     Company=models.CharField(max_length=500)
     Address=models.CharField(max_length=500)
     PhoneNumber=models.CharField(max_length=500)
@@ -11,8 +11,10 @@ class GBPInfo(models.Model):
     Linkedin=models.CharField(blank=True,max_length=500)
     Stat=models.CharField(max_length=5)
 
-class TaskStatus(models.Model):
+class TaskStatus(models.Model):  ##needs to be deleted,as Stat in GBPInfo already takes care of it
     stat=models.CharField(max_length=10,default='rest')
-class Num(models.Model):
-    companynumber=models.IntegerField()
+class Num(models.Model):  ##This tells us about number of companies founds
+    companynumber=models.IntegerField(null=True)
+class Num1(models.Model):  ##this tells us abt how many companies we want
+    limit=models.IntegerField(null=True)
 

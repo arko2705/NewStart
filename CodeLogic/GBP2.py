@@ -6,6 +6,7 @@ import pyautogui
 from seleniumbase import Driver
 import random
 import csv
+from newstartapp.models import Num
 
 class Logic:
     def link_generation(self,a):##python automatically gives a positional arguement when we call it,so we must write "self"
@@ -36,8 +37,8 @@ class Logic:
                 link_list.append(i.get_attribute("href"))
         driver.quit()
         print(f"{len(link_list)} companies found.")
-        print("Enter the number of companies you would like to get the information for: ")
-        loop_number=input()
+        
+        loop_number=Num.objects.last().limit
         return link_list,your_query,loop_number,company_list
     
     def G_InstanceProvider(self):

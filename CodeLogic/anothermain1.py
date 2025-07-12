@@ -2,12 +2,12 @@ import time
 from CodeLogic.GBP2 import Logic   #WOW
 from CodeLogic.customthread import returningThread
 #didnt use beautiful soup,i used selenium cuz google maps is javascript rendered,beautiful soup and requests would haave given back a bs page
-def main(a):
+def main(a,user_choices):
    logic=Logic()  ##need to make an instance first
    link_list,your_query,loop_number,company_list=logic.link_generation(a)    ##gotta access a class's methods like this,how else
    print("Enter which of the fields you would like:")
    print("1.E-mail 2.Linkedin 3.Address  4.Phone Number 5.Maplink 6.Website 7.Only Company\n Enter a number from 1-6")
-   user_choices=logic.UserChoices()
+   #user_choices=logic.UserChoices()
    start=time.time()
    heading_list=logic.headers(user_choices)    
    GBPdriver=logic.G_InstanceProvider()

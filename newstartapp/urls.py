@@ -10,6 +10,5 @@ urlpatterns=[
     path('your data is loading.../',views.loading,name='loading'),
      path('YourData/',views.datadisplay,name="datadisplay"),
      path('EnterNumber/',views.num,name="num")
-
     
 ]
