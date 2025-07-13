@@ -34,6 +34,8 @@ def start1(quer):
 def start2(quer,user_choices):
     status="starting"
     print("starting 2nd process")
+    print("printing user choices")
+    print(user_choices)
     anothermain1.main(quer,user_choices)
     return
 
@@ -65,11 +67,14 @@ def loading(request):
     if choice=='OP-1' and status !="starting":##to ensure that no fuckery's been done when the user goes out but comes back to te loading page again.
         GBPInfo.objects.all().delete()       ###This is present only here,so that data gets deleted only when a person searches something else again.Else they might go back to some page and would want to come to datadisplay page again.
         Num.objects.all().delete()
+        Num1.objects.all().delete()
         a=request.GET.get('loading')          ##a is the query being passed
         start1(a,repeat=None)
         
     elif choice=='OP-2' and status !="starting":
         GBPInfo.objects.all().delete()
+        Num.objects.all().delete()
+        Num1.objects.all().delete()
         quer=request.GET.get('loading')
         user_choices=request.GET.getlist('fields')
         start2(quer,user_choices,repeat=None)   ##repeat=None--->It means the background process will run only once, unless something else restarts it.
@@ -135,7 +140,7 @@ def num(request):
         s="yes"   ##indicating that we found the number of companies
         context={
             's':"yes",
-            'num':Num.objects.last().companynumber
+            'num':Num.objects.last().companynumber        ##model values have to be sent in context,cant be directly accessed by html pages.
         }
     else:
     

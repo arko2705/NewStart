@@ -10,7 +10,7 @@ def main(a):
    logic=Logic()  ##need to make an instance first
    link_list,your_query=logic.link_generation(a)   ##gotta access a class's methods like this,how else
    c=0
-   while True:
+   while True:##this waits till a user inputs some value inside the num1's limit.Else it will progress before the user inputs anything.
       if Num1.objects.last():
          break
       else:

@@ -37,9 +37,8 @@ class Logic:
                 link_list.append(i.get_attribute("href"))
         driver.quit()
         print(f"{len(link_list)} companies found.")
-        
-        loop_number=Num.objects.last().limit
-        return link_list,your_query,loop_number,company_list
+        Num(companynumber=len(link_list)).save()
+        return link_list,your_query,company_list
     
     def G_InstanceProvider(self):
        GBPdriver=Driver(uc=True, headless=True,block_images=True)
