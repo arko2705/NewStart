@@ -154,8 +154,11 @@ class Logic:
             pass
         linkedin="Could not render"
         try:
-              webelement= driven.find_element(By.CLASS_NAME, "zReHs") 
-              linkedin=webelement.get_attribute("href")
+              webelements= driven.find_elements(By.CLASS_NAME, "zReHs")
+              for x in webelements:
+                  if x.rfind('linkedin')>0:
+                      linkedin=x.get_attribute("href")
+                      break
         except:
                driven.save_screenshot('Ldebug.png')
                linkedin="Not found"
@@ -169,7 +172,7 @@ class Logic:
          user_choices.append(int(b))
      return user_choices
     
-    def headers(self,user_choices):
+    def headers(self,user_choices): #email is alwyas appended first,hence email comes early,but in one of the results i saw email being appended later,and idk how's that happening.
            user_choices.sort()
            if 1 in user_choices and 2 in user_choices:
             for i in range(len(user_choices)):

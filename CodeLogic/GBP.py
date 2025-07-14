@@ -141,14 +141,17 @@ class Logic:
         linkedin="Could not render"
         try:
               webelement= driven.find_element(By.CLASS_NAME, "zReHs") 
-              linkedin=webelement.get_attribute("href")
+              for x in webelement:
+                  if x.rfind('linkedin')>0:
+                   linkedin=webelement.get_attribute("href") 
+                   break  
+              
         except:
                driven.save_element("linkedin.png")
                linkedin="Not found"
         return linkedin
 
 
-    
     def csv_store(self,element_list,your_query):
         with open(f'ABusiness Profile-{your_query}.csv','w',newline='',encoding='UTF-8') as file: 
             Columns=['Company Name','Address','Phone Number','Google business profile link','Website','E-Mail','Linkedin-Link']
