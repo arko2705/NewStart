@@ -1,156 +1,122 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 from django.template import loader
-from background_task import background
-from CodeLogic import anothermain2
-from CodeLogic import anothermain1
-from django.db import models
-from .models import GBPInfo,Num,Num1
 from CodeLogic import bgtasks
-status=None
+from django.db import models
+from .models import GBPInfo,Num,Num1,HeaderList,ProcStat,UserChoice,QueryStartStat
+from celery import current_app
+from newstartapp.tasks import start1,start2
 def index(request):
-    bgtasks.deletingBG()           ##deletes all background tasks everytime someone comes to the frontpage,taking care of the error page's go back to home and restart process button.
-    template=loader.get_template('index.html')
-    return HttpResponse(template.render())
+    bgtasks.deletingBG()
+    QueryStartStat(stat="STOPPED").save()  ##For someone who just quits midway,thus whenever homepage opened again previous task will be deleted and stat will be stopped/
+    for i in [UserChoice,ProcStat]:  ##this stores '0' indicating that process ended midway,but for a fresh start is getting deleted again.
+      i.objects.all().delete()     ## ProcStat deletes user choice
+    return HttpResponse(loader.get_template('index.html').render())
 def features(request):
-    template=loader.get_template('Features.html')
-    return HttpResponse(template.render())
+    return HttpResponse(loader.get_template('Features.html').render())
 def HTU(request):
-    template=loader.get_template('HTU.html')
-    return HttpResponse(template.render())
+    return HttpResponse(loader.get_template('HTU.html').render())
 def gs(request):
-    template=loader.get_template('BGetStarted.html')
-    return HttpResponse(template.render())
+    return HttpResponse(loader.get_template('BGetStarted.html').render())
 def ab(request):
-    template=loader.get_template('About.html')
-    return HttpResponse(template.render())
-@background()
-def start1(quer):
-    status="starting"
-    print("starting 1st process")
-    anothermain2.main(quer)     ##a is the query being passed
-    return
-@background()
-def start2(quer,user_choices):
-    status="starting"
-    print("starting 2nd process")
-    print("printing user choices")
-    print(user_choices)
-    anothermain1.main(quer,user_choices)
-    return
+    return HttpResponse(loader.get_template('About.html').render())
+
 
 def q(request):
+ if current_app.control.purge()>1:
+  bgtasks.deletingBG()
  try:
-    Num1.objects.all().delete()
-    bgtasks.deletingBG()##so as to ensure everytiume someone comes to search something the previous tasks go away.
-    template=loader.get_template('Search1.html')
-    global choice
-    context=None
+    for i in [Num1,ProcStat]:
+        i.objects.all().delete()
     choice=request.GET.get("User_Choice")
-    
     if choice=="OP-1":
         context={
             'option':choice
         }
+        ProcStat(stat=1).save()   #saving user choices,yeah renamed the model badly.sorry abt that
     elif choice=="OP-2":
         context={
             'option':choice,
         }
-    return HttpResponse(template.render(context)) 
+        ProcStat(stat=2).save()
+    return HttpResponse(loader.get_template('Search1.html').render(context)) 
  except:
-    template=loader.get_template('Error.html')
-    return HttpResponse(template.render())
+    return HttpResponse(loader.get_template('Error.html').render())
 
 def loading(request):
- try:
+  if QueryStartStat.objects.last():
+    if QueryStartStat.objects.last().stat=="STARTED":
+       QueryStartStat.objects.all().delete()
+       QueryStartStat(stat="STOP IT").save()
+       return HttpResponse(loader.get_template('dontspam.html').render())
+  try:
     template=loader.get_template('loader.html')
-    if choice=='OP-1' and status !="starting":##to ensure that no fuckery's been done when the user goes out but comes back to te loading page again.
-        GBPInfo.objects.all().delete()       ###This is present only here,so that data gets deleted only when a person searches something else again.Else they might go back to some page and would want to come to datadisplay page again.
-        Num.objects.all().delete()
-        Num1.objects.all().delete()
-        a=request.GET.get('loading')          ##a is the query being passed
-        start1(a,repeat=None)
+    for i in [GBPInfo,Num,Num1]:
+       i.objects.all().delete()  
+    if ProcStat.objects.last().stat=='1':
+        a=request.GET.get('loading')          
+        start1.delay(a)                 ##a is the query being passed
         
-    elif choice=='OP-2' and status !="starting":
-        GBPInfo.objects.all().delete()
-        Num.objects.all().delete()
-        Num1.objects.all().delete()
+    elif ProcStat.objects.last().stat=='2':
         quer=request.GET.get('loading')
         user_choices=request.GET.getlist('fields')
-        start2(quer,user_choices,repeat=None)   ##repeat=None--->It means the background process will run only once, unless something else restarts it.
+        start2.delay(quer,user_choices)  
 
-
-    
-    else:
-        pass
     return HttpResponse(template.render())
 
- except:
-    template=loader.get_template('Error.html')
-    return HttpResponse(template.render())
+  except:
+    return HttpResponse(loader.get_template('Error.html').render())
 
-'''def datadisplay(request):
-    template=loader.get_template('display.html')
-    values=GBPInfo.objects.all().values()
-    try:
-      if GBPInfo.objects.last().Stat=="done":
-         context={
-        'headers':['Company','Address','Phone Number','Map-Link','Website','E-Mail','Linkedin'],
-        'values':values,
-        } 
-         return HttpResponse(template.render(context,request))
-      else:
-         template=loader.get_template('Error.html')
-         return HttpResponse(template.render())
-          
-     
-    except:
-        template=loader.get_template('Error.html')
-        return HttpResponse(template.render())'''
 def datadisplay(request):
-    template=loader.get_template('display.html')
     values=GBPInfo.objects.all().values()
     limit=request.GET.get("number-input")   ##takes how many inputs users want,from the number page.The number.html sends data to datadisplay
     Num1(limit=limit).save()
 
-    try:
-      if GBPInfo.objects.last():
+    try: 
+     if GBPInfo.objects.last():
         last_stat=GBPInfo.objects.last().Stat
+        if ProcStat.objects.last().stat=='1':
+           keys=['Company','Address','Phone Number','Map-Link','Website','E-Mail','Linkedin']
+        elif ProcStat.objects.last().stat=='2':
+           headers=HeaderList.objects.last()     
+           keys=[headers.Company,headers.Address,headers.PhoneNumber,headers.MapLink,headers.Website,headers.Email,headers.Linkedin]
         context={
-        'headers':['Company','Address','Phone Number','Map-Link','Website','E-Mail','Linkedin'],
-        'values':values,
-        'last_stat':last_stat,
-        } 
-      else:
+              'values':values,
+              'last_stat':last_stat,
+              'keys':keys
+           }
+           
+     else:
          last_stat="nun"    ###this is only to cover up on the part where my page directly goes to Yourdata,and no first column has been rendered yet.There,there exists no GBPInfo.objects.last(),hence theres an error.But i dont want an error,i just want that the data has not been loaded yet,which is being handled through conditional statements on the same page.Hence all the trouble
          context={
         'last_stat':last_stat,
         } 
-      return HttpResponse(template.render(context,request))
+     return HttpResponse(loader.get_template('display.html').render(context,request))
           
-     
-    except:
-        template=loader.get_template('Error.html')
-        return HttpResponse(template.render())
+    except :
+        return HttpResponse(loader.get_template('Error.html').render())
 
 
 def num(request):
-    template=loader.get_template("number.html")
-    if Num.objects.last() is not None:
-        s="yes"   ##indicating that we found the number of companies
+    if UserChoice.objects.last():
+     if UserChoice.objects.last().choice==0:        ##0 indicates they took too long to respond
+        return HttpResponse(loader.get_template("toolong.html").render())
+    
+    if Num.objects.last() is not None:  
         context={
-            's':"yes",
+            's':"yes",                        ##indicating that we found the number of companies
             'num':Num.objects.last().companynumber        ##model values have to be sent in context,cant be directly accessed by html pages.
         }
     else:
-    
      context={
         's': "no"
      }
-    return HttpResponse(template.render(context))
+    return HttpResponse(loader.get_template("number.html").render(context))
 
 
 
+   
+   
     
 
 

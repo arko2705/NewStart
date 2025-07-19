@@ -1,4 +1,7 @@
+from newstartapp.models import ProcessKeeper
+import os
 def search(a):
+  #ProcessKeeper(procID=os.getpid()).save()
   initial_query="https://www.google.com/maps/search/"
   #print("Enter your query")
   #your_query=input()

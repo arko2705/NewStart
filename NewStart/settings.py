@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'theme',
     'CodeLogic',
     'background_task',
+     'django_celery_results'
     
 ]
 TAILWIND_APP_NAME = 'theme'
@@ -128,3 +129,12 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 NPM_BIN_PATH= r"C:\Program Files\nodejs\npm.cmd" 
+
+
+#celery settings
+CELERY_BROKER_URL='redis://127.0.0.1:6379' #Tells Celery to use Redis running locally (127.0.0.1:6379) as the message broker for task queues.
+CELERY_ACCEPT_CONTENT=['application/json'] # Celery will only accept tasks serialized in JSON format
+CELERY_RESULT_SERIALIZER='json' #Tasks and results will be encoded/decoded as JSON
+CELERY_TASK_SERIALIZER='json'
+CELERY_TIMEZONE='Asia/Kolkata' # Sets the timezone to India (Kolkata) for task schedules                                       JSON = JavaScript Object Notation – A lightweight format for storing/transferring data (like a Python dict but for all languages).Looks like this: {"name": "Alice", "age": 25, "pets": ["dog", "cat"]} (Keys + values in quotes).
+CELERY_RESULT_BACKEND='django-db'

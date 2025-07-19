@@ -30,10 +30,13 @@
                 <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                   S.No
                 </th>
-             {% for b in headers %}
+             {% for i in keys %}
+             {% if i != '' %}
                <th scope="col" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {{ b }}
+                  {{ i }}
                 </th>
+             {% endif %}
+                
             {% endfor %}
             </tr>
         </thead>
@@ -47,26 +50,38 @@
                 <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"> <!--whitespace-nowrap extends row sidewards instead of downward-->
                     {{ x.Company }}
                 </th>
+                {% if x.Address != '' %}
                 <td class="px-6 py-4">
                     {{ x.Address }}
                 </td>
+                {% endif %}
+                {% if x.PhoneNumber != '' %}
                 <td class="px-10 py-4">
                     {{ x.PhoneNumber }}
                 </td>
+                {% endif %}
+                {% if x.MapLink != '' %}
                 <td  scope="row" class="px-6 py-4 whitespace-normal break-words max-w-xs">
                     <div class="flex flex-col">
                     {{ x.MapLink }}
                     </div>
                 </td>
+                {% endif %}
+                 {% if x.Website != '' %}
                 <td class="px-6 py-4">
                     {{ x.Website }}
                 </td>
+                {% endif %}
+                {% if x.Email != '' %}
                 <td class="px-6 py-4">
                     {{ x.Email }}
                 </td>
+                {% endif %}
+                {% if x.Linkedin != '' %}
                 <td class="px-6 py-4">
                     {{ x.Linkedin}}
                 </td>
+                {% endif %}
             </tr>
             {% endfor %}
  

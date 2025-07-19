@@ -1,26 +1,38 @@
 import time
 from CodeLogic.GBP2 import Logic   #WOW
 from CodeLogic.customthread import returningThread
-from newstartapp.models import Num1,GBPInfo
+from newstartapp.models import Num1,GBPInfo,Num,QueryStartStat,UserChoice
                                                                  #didnt use beautiful soup,i used selenium cuz google maps is javascript rendered,beautiful soup and requests would haave given back a bs page
 def main(a,user_choices):
-   user_choices.sort()
-   logic=Logic()                                                 ##need to make an instance first
-   link_list,your_query,company_list=logic.link_generation(a)    ##gotta access a class's methods like this,how else
+   QueryStartStat(stat="STARTED").save()
+   logic=Logic()                                                 
+   link_list,your_query,company_list=logic.link_generation(a)
+   if link_list=='kill' and your_query=='this' and company_list=='process':
+      return 
+   heading_list=logic.headers(user_choices)    ##gotta access a class's methods like this,how else
    c=0
-   while True:                                                   ##this waits till a user inputs some value inside the num1's limit.Else it will progress before the user inputs anything.
+   while True:     ##this waits till a user inputs some value inside the num1's limit.Else it will progress before the user inputs anything.
       if Num1.objects.last():
          break
       else:
-           if c<5:
-             time.sleep(5)                                       ##saving cpu power lmao
+             time.sleep(5)     ##saving cpu power lmao
+             c=c+1
+      print(c)
+      if QueryStartStat.objects.last():
+         if QueryStartStat.objects.last().stat=="STOP IT":
+            QueryStartStat(stat="STOPPED").save()
+            return
 
-           else:
-             time.sleep(2)
-           c=c+1
+      if c==60 :             ##If people enter a query more late than 5 minutes,then that shi terminates.UserChoice name might be a bit misleading,it is only to track whether number of companies has been entered w/i 5 minutes
+         UserChoice(choice=0).save()
+         return
    start=time.time()
-   loop_number=Num1.objects.last().limit
-   heading_list=logic.headers(user_choices)    
+   try:
+     loop_number=Num1.objects.last().limit
+   except:
+      Num1(limit=Num.objects.last().companynumber)     ##if people enter no limit then.WILL HAVE TO FIX THE AUTOMATIC REDIRECT FOR THIS.
+      loop_number=Num1.objects.last().limit
+   #heading_list=logic.headers(user_choices)   
    GBPdriver=logic.G_InstanceProvider()
    GBPdriver.implicitly_wait(5)
    emaildriver=None
@@ -41,6 +53,15 @@ def main(a,user_choices):
    linkedin=''
    for i in link_list:
      if loop_count<int(loop_number):
+        if QueryStartStat.objects.last():
+         if QueryStartStat.objects.last().stat=="STOP IT":
+            GBPdriver.quit()
+            if emaildriver is not None:
+              emaildriver.quit()
+            if ldriver is not None:
+               ldriver.quit()
+            QueryStartStat.objects.all().delete()
+            return        
         logic.link_getter(i,GBPdriver)         ##opens us the link of profile in each iteration
         if  '1' in user_choices or '2' in user_choices or '6' in user_choices:
            Website=logic.website(GBPdriver)
@@ -60,30 +81,35 @@ def main(a,user_choices):
                     
               case '3':
                   Address=logic.address(GBPdriver)
-                  GBPInfo(Address=Address).save()
+                  #GBPInfo(Address=Address).save()
                   result.append(Address)
               case '4':
                   PhoneNumber=logic.PhoneNumber(GBPdriver)
-                  GBPInfo(PhoneNumber=PhoneNumber).save()
+                  #GBPInfo(PhoneNumber=PhoneNumber).save()
                   result.append(PhoneNumber)
 
               case '5':
                    MapLink=i
-                   GBPInfo(MapLink=i).save()
+                  # GBPInfo(MapLink=i).save()
                    result.append(i)
 
               case '6':
                   Web=Website
-                  GBPInfo(Website=Website).save()
+                  #GBPInfo(Website=Website).save()
                   result.append(Website)
         if '1' in user_choices:
            email=ET.join()
+           result.append(email)
         
         if '2' in user_choices:
            linkedin=LIT.join()
-                   #for a in threds:
-           #result.append(a.join())  
-        GBPInfo(Company=company_list[loop_count],Address=Address,PhoneNumber=PhoneNumber,MapLink=MapLink,Wesbite=Web,Email=email,Linkedin=linkedin)
+           result.append(linkedin)
+        #print(company_list[loop_count],Address,PhoneNumber,MapLink,Web,email,linkedin)
+        if loop_count==loop_number-1:
+         GBPInfo(Company=company_list[loop_count],Address=Address,PhoneNumber=PhoneNumber,MapLink=MapLink,Website=Web,Email=email,Linkedin=linkedin,Stat='done').save()
+        else:
+           GBPInfo(Company=company_list[loop_count],Address=Address,PhoneNumber=PhoneNumber,MapLink=MapLink,Website=Web,Email=email,Linkedin=linkedin,Stat='None').save()
+           
         element_list.append(result) 
         loop_count=loop_count+1
      else:
@@ -94,14 +120,13 @@ def main(a,user_choices):
            ldriver.quit()
         break
                   
-   print(element_list)
    end=time.time()
-   print(user_choices)
-   print("user list printed")
    print(f"{end-start} seconds taken")
-   store_in_csv=input("Store in csv:Yes or no:\n")
-   if store_in_csv.lower()=="yes":
-       logic.csv_store(element_list,your_query,heading_list)
+   #store_in_csv=input("Store in csv:Yes or no:\n")
+   #if store_in_csv.lower()=="yes":
+       #logic.csv_store(element_list,your_query,heading_list)
+   QueryStartStat.objects.all().delete()
+   QueryStartStat(stat="STOPPED").save()
    return
   
 if __name__=='__main__':

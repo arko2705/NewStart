@@ -5,13 +5,18 @@ import time
 import pyautogui
 from seleniumbase import Driver
 import csv
-from newstartapp.models import Num
-
+from newstartapp.models import Num,QueryStartStat
+import os
 class Logic:
-  
-    def link_generation(self,a):##python automatically gives a positional arguement when we call it,so we must write "self"
+    def link_generation(self,a):                                  ##python automatically gives a positional arguement when we call it,so we must write "self"
+ 
         googling_it,your_query=s.search(a)
         driver=udc.Chrome(version_main=137,use_subprocess=False)
+        if QueryStartStat.objects.last():
+         if QueryStartStat.objects.last().stat=="STOP IT":
+            QueryStartStat(stat="STOPPED").save()
+            driver.quit()
+            return 'kill','this'
         driver.get(googling_it)
         cond=True
         while cond:
@@ -140,10 +145,10 @@ class Logic:
             pass
         linkedin="Could not render"
         try:
-              webelement= driven.find_element(By.CLASS_NAME, "zReHs") 
-              for x in webelement:
-                  if x.rfind('linkedin')>0:
-                   linkedin=webelement.get_attribute("href") 
+              webelements= driven.find_elements(By.CLASS_NAME, "zReHs")
+              for x in webelements:
+                  if x.get_attribute("href").rfind('linkedin')>0:
+                   linkedin=x.get_attribute("href") 
                    break  
               
         except:

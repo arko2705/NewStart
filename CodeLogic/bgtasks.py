@@ -1,5 +1,5 @@
-from background_task.models import Task
+from celery import current_app
 def deletingBG():
-    Task.objects.all().delete()
+    current_app.control.purge()       ##deletes everything in queue,afaik.
     return
 

@@ -6,16 +6,25 @@ import pyautogui
 from seleniumbase import Driver
 import random
 import csv
-from newstartapp.models import Num
-
+from newstartapp.models import Num,HeaderList,QueryStartStat
+import sys
+import os
 class Logic:
-    def link_generation(self,a):##python automatically gives a positional arguement when we call it,so we must write "self"
+    def link_generation(self,a):                         ##python automatically gives a positional arguement when we call it,so we must write "self"
+ 
         googling_it,your_query=s.search(a)
         driver=udc.Chrome(version_main=137,use_subprocess=False)
         driver.get(googling_it)
         cond=True
+        if QueryStartStat.objects.last():
+         if QueryStartStat.objects.last().stat=="STOP IT":
+            QueryStartStat(stat="STOPPED").save()
+            driver.quit()
+            return 'kill','this','process'
         try:
-         driver.find_element(By.CSS_SELECTOR,"button.D6NGZc")
+            driver.find_element(By.CSS_SELECTOR,".GMtm7c.fontTitleSmall")
+            driver.quit()
+            sys.exit()
         except:
             pass
         while cond:
@@ -36,7 +45,7 @@ class Logic:
                 company_list.append(i.get_attribute("aria-label"))
                 link_list.append(i.get_attribute("href"))
         driver.quit()
-        print(f"{len(link_list)} companies found.")
+        #print(f"{len(link_list)} companies found.")
         Num(companynumber=len(link_list)).save()
         return link_list,your_query,company_list
     
@@ -154,9 +163,9 @@ class Logic:
             pass
         linkedin="Could not render"
         try:
-              webelements= driven.find_elements(By.CLASS_NAME, "zReHs")
-              for x in webelements:
-                  if x.rfind('linkedin')>0:
+          webelements= driven.find_elements(By.CLASS_NAME, "zReHs")
+          for x in webelements:
+            if x.get_attribute("href").rfind('linkedin')>0:
                       linkedin=x.get_attribute("href")
                       break
         except:
@@ -173,42 +182,63 @@ class Logic:
      return user_choices
     
     def headers(self,user_choices): #email is alwyas appended first,hence email comes early,but in one of the results i saw email being appended later,and idk how's that happening.
+           HeaderList.objects.all().delete()
            user_choices.sort()
-           if 1 in user_choices and 2 in user_choices:
-            for i in range(len(user_choices)):
-               if user_choices[i]>2:
-                   temp=user_choices[i-2]
-                   user_choices[i-2]=user_choices[i]
-                   user_choices[i]=temp
-           elif 1 in user_choices or 2 in user_choices:
-            for i in range(len(user_choices)):
-               if user_choices[i]>2:
-                   temp=user_choices[i-1]
-                   user_choices[i-1]=user_choices[i]
-                   user_choices[i]=temp
-           else:
-               pass
-               
-
+           count1=0
+           count2=0
+           for i in user_choices:
+               if int(i)<=2:
+                   count1=count1+1
+               else:
+                   count2=count2+1
+           arr1=[]
+           arr2=[]
+           arr3=user_choices.copy()
+           print("arr3 copied")
+           if count1>0 and count2>0:
+               k=0
+               while k<count1:
+                   arr1.append(user_choices[k])
+                   k=k+1
+               l=count1
+               while l<len(user_choices):
+                   arr2.append(user_choices[l])
+                   l=l+1
+               arr3.clear()
+               arr3=arr2+arr1
+           print(f"printing arr3 {arr3}")
            heading_list=[]
            heading_list.append("Company")
-           for x in user_choices:
+           email=''
+           linkedin=''
+           address=''
+           phonenumber=''
+           maplink=''
+           website=''
+           for x in arr3:
             match x:
-              case 1:
+              case '1':
+                 email="E Mail"
                  heading_list.append("E Mail")
-              case 2:
+              case '2':
+                  linkedin="Linkedin"
                   heading_list.append("Linkedin")
-              case 3:
+              case '3':
+                 address="Address"
                  heading_list.append("Address")
-              case 4:
+              case '4':
+                 phonenumber="Phone Number"
                  heading_list.append("Phone Number")
                   
-              case 5:
+              case '5':
+                  maplink="Map Link"
                   heading_list.append("Map Link")
 
-              case 6:
+              case '6':
+                  website="Website"
                   heading_list.append("Website")
-
+            
+           HeaderList(Company="Company",Address=address,PhoneNumber=phonenumber,MapLink=maplink,Website=website,Email=email,Linkedin=linkedin).save()
            return heading_list
 
 
