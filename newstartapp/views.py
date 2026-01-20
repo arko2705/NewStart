@@ -23,46 +23,40 @@ def ab(request):
 
 
 def q(request):
- if current_app.control.purge()>1:
-  bgtasks.deletingBG()
+ current_app.control.purge()
  try:
     for i in [Num1,ProcStat]:
         i.objects.all().delete()
     choice=request.GET.get("User_Choice")
-    if choice=="OP-1":
-        context={
+    context={
             'option':choice
         }
+    if choice=="OP-1":
         ProcStat(stat=1).save()   #saving user choices,yeah renamed the model badly.sorry abt that
     elif choice=="OP-2":
-        context={
-            'option':choice,
-        }
         ProcStat(stat=2).save()
     return HttpResponse(loader.get_template('Search1.html').render(context)) 
  except:
     return HttpResponse(loader.get_template('Error.html').render())
 
 def loading(request):
-  if QueryStartStat.objects.last():
-    if QueryStartStat.objects.last().stat=="STARTED":
+  if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="STARTED":
        QueryStartStat.objects.all().delete()
        QueryStartStat(stat="STOP IT").save()
        return HttpResponse(loader.get_template('dontspam.html').render())
   try:
-    template=loader.get_template('loader.html')
     for i in [GBPInfo,Num,Num1]:
-       i.objects.all().delete()  
-    if ProcStat.objects.last().stat=='1':
-        a=request.GET.get('loading')          
-        start1.delay(a)                 ##a is the query being passed
+       i.objects.all().delete() 
+    quer=request.GET.get('loading')  
+    if ProcStat.objects.last().stat=='1':         
+        start1.delay(quer)                 ##a is the query being passed
         
     elif ProcStat.objects.last().stat=='2':
-        quer=request.GET.get('loading')
         user_choices=request.GET.getlist('fields')
+        print(user_choices)
         start2.delay(quer,user_choices)  
 
-    return HttpResponse(template.render())
+    return HttpResponse(loader.get_template('loader.html').render())
 
   except:
     return HttpResponse(loader.get_template('Error.html').render())
@@ -87,7 +81,7 @@ def datadisplay(request):
            }
            
      else:
-         last_stat="nun"    ###this is only to cover up on the part where my page directly goes to Yourdata,and no first column has been rendered yet.There,there exists no GBPInfo.objects.last(),hence theres an error.But i dont want an error,i just want that the data has not been loaded yet,which is being handled through conditional statements on the same page.Hence all the trouble
+         last_stat="nun"    ###this is only to cover up on the part where my page directly goes to Your data,and no first column has been rendered yet.There,there exists no GBPInfo.objects.last(),hence theres an error.But i dont want an error,i just want that the data has not been loaded yet,which is being handled through conditional statements on the same page.Hence all the trouble
          context={
         'last_stat':last_stat,
         } 
@@ -98,8 +92,7 @@ def datadisplay(request):
 
 
 def num(request):
-    if UserChoice.objects.last():
-     if UserChoice.objects.last().choice==0:        ##0 indicates they took too long to respond
+    if UserChoice.objects.last() and UserChoice.objects.last().choice==0:        ##0 indicates they took too long to respond
         return HttpResponse(loader.get_template("toolong.html").render())
     
     if Num.objects.last() is not None:  

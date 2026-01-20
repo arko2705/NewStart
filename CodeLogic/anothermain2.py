@@ -20,8 +20,7 @@ def main(a):
              time.sleep(5) ##saving cpu power lmao
              c=c+1
       print(c)
-      if QueryStartStat.objects.last():
-         if QueryStartStat.objects.last().stat=="STOP IT":
+      if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="STOP IT":
             QueryStartStat(stat="STOPPED").save()
             return
 

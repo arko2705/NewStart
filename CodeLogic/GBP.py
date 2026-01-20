@@ -6,12 +6,12 @@ import pyautogui
 from seleniumbase import Driver
 import csv
 from newstartapp.models import Num,QueryStartStat
-import os
+
 class Logic:
     def link_generation(self,a):                                  ##python automatically gives a positional arguement when we call it,so we must write "self"
  
         googling_it,your_query=s.search(a)
-        driver=udc.Chrome(version_main=137,use_subprocess=False)
+        driver=udc.Chrome(use_subprocess=False)
         if QueryStartStat.objects.last():
          if QueryStartStat.objects.last().stat=="STOP IT":
             QueryStartStat(stat="STOPPED").save()

@@ -4,32 +4,23 @@ from selenium.webdriver.common.by import By
 import time
 import pyautogui
 from seleniumbase import Driver
-import random
 import csv
 from newstartapp.models import Num,HeaderList,QueryStartStat
-import sys
-import os
+
 class Logic:
     def link_generation(self,a):                         ##python automatically gives a positional arguement when we call it,so we must write "self"
  
         googling_it,your_query=s.search(a)
-        driver=udc.Chrome(version_main=137,use_subprocess=False)
+        driver=udc.Chrome(use_subprocess=False)
         driver.get(googling_it)
         cond=True
-        if QueryStartStat.objects.last():
-         if QueryStartStat.objects.last().stat=="STOP IT":
+        if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="STOP IT":
             QueryStartStat(stat="STOPPED").save()
             driver.quit()
             return 'kill','this','process'
-        try:
-            driver.find_element(By.CSS_SELECTOR,".GMtm7c.fontTitleSmall")
-            driver.quit()
-            sys.exit()
-        except:
-            pass
         while cond:
             try:
-                driver.find_element(By.CLASS_NAME,"HlvSq")#to indicate end to it all
+                driver.find_element(By.CLASS_NAME,"HlvSq") #to indicate end to it all
                 cond=False
             except:
                 pass
@@ -52,9 +43,11 @@ class Logic:
     def G_InstanceProvider(self):
        GBPdriver=Driver(uc=True, headless=True,block_images=True)
        return GBPdriver
+    
     def E_InstanceProvider(self):
        emaildriver=Driver(uc=True,headless=True,block_images=True)
        return emaildriver
+    
     def L_InstanceProvider(self):
        linkedindriver=Driver(uc=True,headless=True,block_images=True)
        return linkedindriver
@@ -62,6 +55,7 @@ class Logic:
     def link_getter(self,i,driver):
         driver.uc_open_with_reconnect(i, reconnect_time=0.1)
         return
+    
     def company(self,i,driven):
            time.sleep(0.3)
            try: 
@@ -73,6 +67,7 @@ class Logic:
              print("Trouble rendering company")
              Company="Not present on google business profiles"
            return Company
+    
     def website(self,driver):
            ProbableWebSites=[]
            WebSite=None                  #new concept here
@@ -172,6 +167,7 @@ class Logic:
                driven.save_screenshot('Ldebug.png')
                linkedin="Not found"
         return linkedin
+    
     def UserChoices(self):
      user_choices=[]
      while True:
@@ -183,65 +179,33 @@ class Logic:
     
     def headers(self,user_choices): #email is alwyas appended first,hence email comes early,but in one of the results i saw email being appended later,and idk how's that happening.
            HeaderList.objects.all().delete()
-           user_choices.sort()
-           count1=0
-           count2=0
-           for i in user_choices:
-               if int(i)<=2:
-                   count1=count1+1
-               else:
-                   count2=count2+1
-           arr1=[]
-           arr2=[]
-           arr3=user_choices.copy()
-           print("arr3 copied")
-           if count1>0 and count2>0:
-               k=0
-               while k<count1:
-                   arr1.append(user_choices[k])
-                   k=k+1
-               l=count1
-               while l<len(user_choices):
-                   arr2.append(user_choices[l])
-                   l=l+1
-               arr3.clear()
-               arr3=arr2+arr1
-           print(f"printing arr3 {arr3}")
            heading_list=[]
-           heading_list.append("Company")
+           Company="Company"
            email=''
            linkedin=''
            address=''
            phonenumber=''
            maplink=''
            website=''
-           for x in arr3:
+           for x in user_choices:
             match x:
               case '1':
-                 email="E Mail"
-                 heading_list.append("E Mail")
-              case '2':
-                  linkedin="Linkedin"
-                  heading_list.append("Linkedin")
-              case '3':
                  address="Address"
-                 heading_list.append("Address")
+              case '2':
+                  phonenumber="Phone Number"
+              case '3':
+                 maplink="Map Link"
               case '4':
-                 phonenumber="Phone Number"
-                 heading_list.append("Phone Number")
-                  
+                 website="Website"
               case '5':
-                  maplink="Map Link"
-                  heading_list.append("Map Link")
-
+                  email="E mail"
               case '6':
-                  website="Website"
-                  heading_list.append("Website")
-            
+                  linkedin="Linkedin"
+           for i in [Company,address,phonenumber,maplink,website,email,linkedin]:
+               if(i!=''):
+                   heading_list.append(i)
            HeaderList(Company="Company",Address=address,PhoneNumber=phonenumber,MapLink=maplink,Website=website,Email=email,Linkedin=linkedin).save()
            return heading_list
-
-
     
     def csv_store(self,element_list,your_query,headers):
         with open(f'ABusiness Profile-{your_query}.csv','w',newline='',encoding='UTF-8') as file: 

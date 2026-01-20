@@ -18,8 +18,7 @@ def main(a,user_choices):
              time.sleep(5)     ##saving cpu power lmao
              c=c+1
       print(c)
-      if QueryStartStat.objects.last():
-         if QueryStartStat.objects.last().stat=="STOP IT":
+      if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="STOP IT":
             QueryStartStat(stat="STOPPED").save()
             return
 
@@ -31,16 +30,15 @@ def main(a,user_choices):
      loop_number=Num1.objects.last().limit
    except:
       Num1(limit=Num.objects.last().companynumber)     ##if people enter no limit then.WILL HAVE TO FIX THE AUTOMATIC REDIRECT FOR THIS.
-      loop_number=Num1.objects.last().limit
-   #heading_list=logic.headers(user_choices)   
+      loop_number=Num1.objects.last().limit  
    GBPdriver=logic.G_InstanceProvider()
    GBPdriver.implicitly_wait(5)
    emaildriver=None
    ldriver=None
-   if '1' in user_choices:
+   if '5' in user_choices:
       emaildriver=logic.E_InstanceProvider()
       emaildriver.implicitly_wait(5)
-   if '2' in user_choices:
+   if '6' in user_choices:
       ldriver=logic.L_InstanceProvider()
       ldriver.implicitly_wait(5) 
    loop_count=0
@@ -53,8 +51,7 @@ def main(a,user_choices):
    linkedin=''
    for i in link_list:
      if loop_count<int(loop_number):
-        if QueryStartStat.objects.last():
-         if QueryStartStat.objects.last().stat=="STOP IT":
+        if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="STOP IT":
             GBPdriver.quit()
             if emaildriver is not None:
               emaildriver.quit()
@@ -66,42 +63,45 @@ def main(a,user_choices):
         if  '1' in user_choices or '2' in user_choices or '6' in user_choices:
            Website=logic.website(GBPdriver)
         threds=[]             ##Storing threads in a list,damn.
-        result=[]          
+        result=[] 
+        rev=user_choices.copy()
+        rev.reverse()   ##to maintain order of fields in csv  
+            
         result.append(company_list[loop_count])
-        for x in user_choices:
+        for x in rev:
             match x:
-              case '1':
+              case '5':
                   ET=returningThread(target=logic.email,args=(company_list[loop_count],Website,emaildriver))
                   ET.start()
                   threds.append(ET)
-              case '2':
+              case '6':
                   LIT=returningThread(target=logic.linkedin,args=(Website,company_list[loop_count],ldriver))
                   LIT.start()
                   threds.append(LIT)
                     
-              case '3':
+              case '1':
                   Address=logic.address(GBPdriver)
                   #GBPInfo(Address=Address).save()
                   result.append(Address)
-              case '4':
+              case '2':
                   PhoneNumber=logic.PhoneNumber(GBPdriver)
                   #GBPInfo(PhoneNumber=PhoneNumber).save()
                   result.append(PhoneNumber)
 
-              case '5':
+              case '3':
                    MapLink=i
                   # GBPInfo(MapLink=i).save()
                    result.append(i)
 
-              case '6':
+              case '4':
                   Web=Website
                   #GBPInfo(Website=Website).save()
                   result.append(Website)
-        if '1' in user_choices:
+        if '5' in user_choices:
            email=ET.join()
            result.append(email)
         
-        if '2' in user_choices:
+        if '6' in user_choices:
            linkedin=LIT.join()
            result.append(linkedin)
         #print(company_list[loop_count],Address,PhoneNumber,MapLink,Web,email,linkedin)
@@ -124,7 +124,7 @@ def main(a,user_choices):
    print(f"{end-start} seconds taken")
    #store_in_csv=input("Store in csv:Yes or no:\n")
    #if store_in_csv.lower()=="yes":
-       #logic.csv_store(element_list,your_query,heading_list)
+   logic.csv_store(element_list,your_query,heading_list)
    QueryStartStat.objects.all().delete()
    QueryStartStat(stat="STOPPED").save()
    return
