@@ -81,21 +81,15 @@ def main(a,user_choices):
                     
               case '1':
                   Address=logic.address(GBPdriver)
-                  #GBPInfo(Address=Address).save()
                   result.append(Address)
               case '2':
                   PhoneNumber=logic.PhoneNumber(GBPdriver)
-                  #GBPInfo(PhoneNumber=PhoneNumber).save()
                   result.append(PhoneNumber)
-
               case '3':
                    MapLink=i
-                  # GBPInfo(MapLink=i).save()
                    result.append(i)
-
               case '4':
                   Web=Website
-                  #GBPInfo(Website=Website).save()
                   result.append(Website)
         if '5' in user_choices:
            email=ET.join()
@@ -104,7 +98,6 @@ def main(a,user_choices):
         if '6' in user_choices:
            linkedin=LIT.join()
            result.append(linkedin)
-        #print(company_list[loop_count],Address,PhoneNumber,MapLink,Web,email,linkedin)
         if loop_count==loop_number-1:
          GBPInfo(Company=company_list[loop_count],Address=Address,PhoneNumber=PhoneNumber,MapLink=MapLink,Website=Web,Email=email,Linkedin=linkedin,Stat='done').save()
         else:
@@ -122,8 +115,6 @@ def main(a,user_choices):
                   
    end=time.time()
    print(f"{end-start} seconds taken")
-   #store_in_csv=input("Store in csv:Yes or no:\n")
-   #if store_in_csv.lower()=="yes":
    logic.csv_store(element_list,your_query,heading_list)
    QueryStartStat.objects.all().delete()
    QueryStartStat(stat="STOPPED").save()

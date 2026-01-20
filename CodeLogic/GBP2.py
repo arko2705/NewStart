@@ -36,7 +36,6 @@ class Logic:
                 company_list.append(i.get_attribute("aria-label"))
                 link_list.append(i.get_attribute("href"))
         driver.quit()
-        #print(f"{len(link_list)} companies found.")
         Num(companynumber=len(link_list)).save()
         return link_list,your_query,company_list
     
