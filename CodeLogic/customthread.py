@@ -1,6 +1,4 @@
 from threading import Thread
-
-from newstartapp.models import ProcessKeeper
 class returningThread(Thread):
    
     def __init__(self,group=None,target=None,name=None,args=(),kwargs={}):

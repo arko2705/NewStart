@@ -36,5 +36,9 @@ class QueryStartStat(models.Model):
 class QueryStopStat(models.Model):
     stat=models.CharField(max_length=10)
 
+class OutputFile(models.Model):
+    file = models.FileField(upload_to="outputs/")
+    created_at = models.DateTimeField(auto_now_add=True) ##This field automatically stores the date and time when the model object is first created. means Django sets it once and never updates it again. It’s useful for tracking when a file, record, or entry was generated or uploaded.
 
+    
 

@@ -138,3 +138,7 @@ CELERY_RESULT_SERIALIZER='json' #Tasks and results will be encoded/decoded as JS
 CELERY_TASK_SERIALIZER='json'
 CELERY_TIMEZONE='Asia/Kolkata' # Sets the timezone to India (Kolkata) for task schedules                                       JSON = JavaScript Object Notation – A lightweight format for storing/transferring data (like a Python dict but for all languages).Looks like this: {"name": "Alice", "age": 25, "pets": ["dog", "cat"]} (Keys + values in quotes).
 CELERY_RESULT_BACKEND='django-db'
+
+#download button stuff
+MEDIA_URL = '/media/'    ##MEDIA_URL defines the URL path used to access those files in the browser. When someone visits a link starting with /media/, Django knows to fetch the file from MEDIA_ROOT.
+MEDIA_ROOT = BASE_DIR / 'media' ##MEDIA_ROOT defines the physical location on the server where files (like CSVs, images, PDFs) are stored. Here, it means Django will save files inside a folder named media in your project’s base directory.

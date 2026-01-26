@@ -16,10 +16,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('newstartapp.urls')),
     path('your data is loading.../',include('newstartapp.urls')),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)   ##This line is used only in development to make Django serve uploaded media files (like PDFs, images, CSVs).In deployment different scene
+
+
+

@@ -3,12 +3,12 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.template import loader
 from CodeLogic import bgtasks
 from django.db import models
-from .models import GBPInfo,Num,Num1,HeaderList,ProcStat,UserChoice,QueryStartStat
+from .models import GBPInfo,Num,Num1,HeaderList,ProcStat,UserChoice,QueryStartStat,OutputFile
 from celery import current_app
 from newstartapp.tasks import start1,start2
 def index(request):
     bgtasks.deletingBG()
-    QueryStartStat(stat="STOPPED").save()  ##For someone who just quits midway,thus whenever homepage opened again previous task will be deleted and stat will be stopped/
+    QueryStartStat(stat="RESTING").save()  ##For someone who just quits midway,thus whenever homepage opened again previous task will be deleted and stat will be stopped/
     for i in [UserChoice,ProcStat]:  ##this stores '0' indicating that process ended midway,but for a fresh start is getting deleted again.
       i.objects.all().delete()     ## ProcStat deletes user choice
     return HttpResponse(loader.get_template('index.html').render())
@@ -41,13 +41,12 @@ def q(request):
 
 def loading(request):
   if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="STARTED":
-       QueryStartStat.objects.all().delete()
-       QueryStartStat(stat="STOP IT").save()
+       QueryStartStat(stat="RESTING").save()
        return HttpResponse(loader.get_template('dontspam.html').render())
   try:
-    for i in [GBPInfo,Num,Num1]:
+    for i in [GBPInfo,Num,Num1,OutputFile]:
        i.objects.all().delete() 
-    quer=request.GET.get('loading')  
+    quer=request.GET.get('loading')
     if ProcStat.objects.last().stat=='1':         
         start1.delay(quer)                 ##a is the query being passed
         
@@ -62,6 +61,9 @@ def loading(request):
     return HttpResponse(loader.get_template('Error.html').render())
 
 def datadisplay(request):
+    if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="TOOLONG":
+        QueryStartStat(stat="RESTING").save()
+        return HttpResponse(loader.get_template('toolong.html').render())
     values=GBPInfo.objects.all().values()
     limit=request.GET.get("number-input")   ##takes how many inputs users want,from the number page.The number.html sends data to datadisplay
     Num1(limit=limit).save()
@@ -69,6 +71,7 @@ def datadisplay(request):
     try: 
      if GBPInfo.objects.last():
         last_stat=GBPInfo.objects.last().Stat
+        csv_file=OutputFile.objects.last()
         if ProcStat.objects.last().stat=='1':
            keys=['Company','Address','Phone Number','Map-Link','Website','E-Mail','Linkedin']
         elif ProcStat.objects.last().stat=='2':
@@ -77,7 +80,8 @@ def datadisplay(request):
         context={
               'values':values,
               'last_stat':last_stat,
-              'keys':keys
+              'keys':keys,
+              'obj':csv_file
            }
            
      else:
@@ -96,17 +100,24 @@ def num(request):
         return HttpResponse(loader.get_template("toolong.html").render())
     
     if Num.objects.last() is not None:  
-        context={
+        if Num.objects.last().companynumber>0:
+           context={
             's':"yes",                        ##indicating that we found the number of companies
             'num':Num.objects.last().companynumber        ##model values have to be sent in context,cant be directly accessed by html pages.
-        }
+           }
+        elif Num.objects.last().companynumber==-1:   ##-1 indicates that automated tab was closed by user
+           context={
+              's':"UserClosedTab"             ##they closed the automated tab
+           }
+        elif Num.objects.last().companynumber==-2:  ##-2 indicates pyautogui triggered
+           context={
+              's':"PyAutoGUITriggered"                
+           }
     else:
      context={
         's': "no"
      }
     return HttpResponse(loader.get_template("number.html").render(context))
-
-
 
    
    
