@@ -5,7 +5,7 @@ import undetected_chromedriver as udc
 from newstartapp.models import Num,QueryStartStat,Num1,UserChoice,OutputFile
 from django.core.files import File
 import time
-import pyautogui
+from selenium.webdriver.common.keys import Keys
 def commonEL(self,Website,Company,driven,prompt):
         initial_query="https://www.google.com/search?q="
         if Website and Website.startswith("https") and Website.endswith("/"):
@@ -48,9 +48,10 @@ def email(driven):
         return emaillist
 
 def commonStart(a):
-        #pyautogui.FAILSAFE = False
+        a=0
+        print("Starting headless browser for link extraction")
         googling_it,your_query=s.search(a)
-        driver=udc.Chrome(use_subprocess=False)
+        driver=udc.Chrome(headless=True,use_subprocess=False,version_main=144)
         if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="RESTING":
             driver.quit()
             return "kill","this","process",
@@ -63,20 +64,28 @@ def commonStart(a):
             except:
                 pass
             try:
+              panel = driver.find_element(By.XPATH, '//div[@role="feed"]')
+              panel.send_keys(Keys.PAGE_DOWN)
               time.sleep(0.05)
-              pyautogui.scroll(-400)
-            except pyautogui.FailSafeException:
-                driver.quit()
-                Num(companynumber=-2).save()
-                QueryStartStat(stat="RESTING").save()
-                return "kill","this","process"
+            except:
+                 driver.save_screenshot('debug.png')
+                 pass
+            driver.save_screenshot('debug1.png')
             try:
                 driver.title   #just to check if driver is alive. Gotta create a "driver is closed" page and find a way to handle it seperately from the spamming requests thingie.
             except:
                 Num(companynumber=-1).save()
                 QueryStartStat(stat="RESTING").save()
                 return "kill","this","process"
-        finder=driver.find_elements(By.CLASS_NAME,"hfpxzc") #to find all the links once end reached
+            a=a+1
+            if a==100:
+                break
+        try:
+          finder=driver.find_elements(By.CLASS_NAME,"hfpxzc") #to find all the links once end reached
+        except:
+           Num(companynumber=-1).save()    ###means captcha is open and we are cooked.
+           QueryStartStat(stat="RESTING").save()
+           return "kill","this","process"            
         return finder,your_query,driver
 
 def commonWait():
@@ -110,7 +119,7 @@ def csv_store(element_list,your_query,headers):
         print("Remember to extend your row width in the csv files,for it to look prettier and better!")
         return obj
 
-def website(self,driver):
+def website(driver):
            ProbableWebSites=[]
            WebSite=None                  #new concept here
            try:

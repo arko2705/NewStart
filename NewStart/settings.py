@@ -83,7 +83,7 @@ WSGI_APPLICATION = 'NewStart.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -142,3 +142,11 @@ CELERY_RESULT_BACKEND='django-db'
 #download button stuff
 MEDIA_URL = '/media/'    ##MEDIA_URL defines the URL path used to access those files in the browser. When someone visits a link starting with /media/, Django knows to fetch the file from MEDIA_ROOT.
 MEDIA_ROOT = BASE_DIR / 'media' ##MEDIA_ROOT defines the physical location on the server where files (like CSVs, images, PDFs) are stored. Here, it means Django will save files inside a folder named media in your project’s base directory.
+
+
+    ##'ENGINE': 'django.db.backends.postgresql',
+      ##  'NAME': 'newstart',
+        ##'USER': 'Arko',
+        ##'PASSWORD': 'Thelastships1_',
+        ##'HOST': 'scrapingdb.clqe0qkwapvo.eu-north-1.rds.amazonaws.com',
+        ##'PORT': '432',

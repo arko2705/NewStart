@@ -105,13 +105,9 @@ def num(request):
             's':"yes",                        ##indicating that we found the number of companies
             'num':Num.objects.last().companynumber        ##model values have to be sent in context,cant be directly accessed by html pages.
            }
-        elif Num.objects.last().companynumber==-1:   ##-1 indicates that automated tab was closed by user
+        elif Num.objects.last().companynumber==-1:   ##-1 indicates that automated tab was closed as it got blocked
            context={
-              's':"UserClosedTab"             ##they closed the automated tab
-           }
-        elif Num.objects.last().companynumber==-2:  ##-2 indicates pyautogui triggered
-           context={
-              's':"PyAutoGUITriggered"                
+              's':"BotGotDetected"             ##google closed the automated tab
            }
     else:
      context={
