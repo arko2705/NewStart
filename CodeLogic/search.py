@@ -2,6 +2,8 @@ from newstartapp.models import ProcessKeeper
 
 def search(a):
   initial_query="https://www.google.com/maps/search/"
+  print("Inside search.py")
+  print(a)
   query_list=a.split(" ")
   for i in query_list:
     initial_query=initial_query+"+"+i

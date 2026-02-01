@@ -6,6 +6,7 @@ def start1(self,quer):
     print(f"task id is {self.request.id}")
     status="starting"
     print("starting 1st process") 
+    print(quer)
     anothermain2.main(quer) ##a is the query being passed
     return
 

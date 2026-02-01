@@ -4,6 +4,8 @@ from seleniumbase import Driver
 from newstartapp.models import Num
 from CodeLogic import common
 from django.shortcuts import render
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 class Logic:
     def link_generation(self,a):                               ##python automatically gives a positional arguement when we call it,so we must write "self"
         finder,your_query,driver=common.commonStart(a)
@@ -26,10 +28,11 @@ class Logic:
         driver.uc_open_with_reconnect(i, reconnect_time=0.1)
         return
     def company(self,driven):
-           time.sleep(0.3)
+           WebDriverWait(driven, 10).until(
+             EC.presence_of_element_located((By.CSS_SELECTOR, ".m6QErb.Pf6ghf.XiKgde.ecceSd.tLjsW"))
+        )
            try: 
             CFinder=driven.find_element(By.CSS_SELECTOR, ".m6QErb.Pf6ghf.XiKgde.ecceSd.tLjsW")
-            time.sleep(0.1)
             NeedToStrip=CFinder.get_attribute("aria-label")
             Company=NeedToStrip.replace("Actions for ","")
            except:
@@ -40,7 +43,7 @@ class Logic:
     def address_PhoneNumber(self,driven):#Gotta fix the address logic by a bit
            try:   
              AFinder=driven.find_element(By.CLASS_NAME,"CsEnBe")
-             time.sleep(0.1)
+             #time.sleep(0.1)
              NeedToClean=AFinder.get_attribute("aria-label")
              Address="Not present on google business profiles"
              if NeedToClean.startswith("Address: "):
@@ -66,6 +69,6 @@ class Logic:
         return emaillist
     
     def linkedin(self,Website,Company,driven):
-        common.commonEL(self,Website,Company,driven,prompt="+Linkedin+profile")
+        common.commonEL(self,Website,Company,driven,prompt=" business")
         linkedin=common.linkedin(driven)
         return linkedin

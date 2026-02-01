@@ -66,7 +66,7 @@ class Logic:
         return emaillist
     
     def linkedin(self,Website,Company,driven):
-        common.commonEL(self,Website,Company,driven,prompt="+Linkedin+profile")
+        common.commonEL(self,Website,Company,driven,prompt="+linkedin+profile")
         linkedin=common.linkedin(driven)
         return linkedin
     

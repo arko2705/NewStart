@@ -4,6 +4,7 @@ from CodeLogic.customthread import returningThread
 from newstartapp.models import GBPInfo,Num1,UserChoice,QueryStartStat  #It's supposed to be procstat,table names are a bit misleading.UserChoice was initially for OP-1,OP-2,now here its been used to termiante
 #didnt use beautiful soup,i used selenium cuz google maps is javascript rendered,beautiful soup and requests would haave given back a bs 
 from CodeLogic import common
+import random
 def main(a):
    QueryStartStat(stat="STARTED").save()
    logic=Logic()  ##need to make an instance first
@@ -14,7 +15,7 @@ def main(a):
    if status=="kill":
       return
    GBPdriver,emaildriver,ldriver=logic.InstanceProvider()
-   for i in [GBPdriver,emaildriver,ldriver]:
+   for i in [GBPdriver,emaildriver,ldriver]: #ldriver
       i.implicitly_wait(5)
    start=time.time()
    loop_count=0
@@ -51,6 +52,7 @@ def main(a):
             GBPInfo(Company=Company,Address=Address,PhoneNumber=PhoneNumber,MapLink=i,Website=Website,Email=emaillist,Linkedin=linkedin,Stat="None").save()
 
          loop_count=loop_count+1
+         print(loop_count)
       else:
         for c in [GBPdriver,emaildriver,ldriver]:  ##never reuse loop iterating variables
           c.quit()

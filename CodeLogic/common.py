@@ -6,34 +6,49 @@ from newstartapp.models import Num,QueryStartStat,Num1,UserChoice,OutputFile
 from django.core.files import File
 import time
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import random
+##locators have been used btw
 def commonEL(self,Website,Company,driven,prompt):
         initial_query="https://www.google.com/search?q="
-        if Website and Website.startswith("https") and Website.endswith("/"):
+        if prompt !=" business" and Website and Website.startswith("https") and Website.endswith("/"):
+               print("i was here in website")
                iweb=Website[:len(Website)-1]
                fweb=iweb.replace("https://","")
                final_query=initial_query+fweb+prompt
-        else:       
-              OnlyCompany=Company.split('|')
-              Company_array=OnlyCompany[0].split(' ')
+        else:     
+              print("I was here in company")  
+              if '|' in Company:
+                OnlyCompany=Company.split('|')
+                Company_array=OnlyCompany[0].split(' ')
+              else:
+                   Company_array=Company.split(' ')
               for f in Company_array:
                  initial_query=initial_query+"+"+f
               final_query=initial_query+prompt
+        sleep=random.randrange(3,10)
+        time.sleep(sleep)
         try:
-            driven.uc_open_with_reconnect(final_query, reconnect_time=0.1)
+            driven.uc_open_with_reconnect(final_query, reconnect_time=sleep/10)
             driven.find_element(By.XPATH,"//div[@class='sjVJQd pt054b']").click()  ##That give your location prompt that comes up in incognito so that they can give more accurate results
         except:
             pass
+        WebDriverWait(driven, 10).until(
+             EC.presence_of_element_located((By.XPATH, "//body"))
+        )
+        
 def linkedin(driven):
-        linkedin="Could not render"
+        linkedin="Not present on google business profiles"
         try:
-          webelements= driven.find_elements(By.CLASS_NAME, "zReHs")
+          webelements= driven.find_elements(By.CSS_SELECTOR, "a[href*='linkedin']")
           for x in webelements:
-            if x.get_attribute("href").rfind('linkedin')>0:
-                      linkedin=x.get_attribute("href")
-                      break
+                     linkedin=x.get_attribute("href")
+                     break
         except:
                driven.save_screenshot('Ldebug.png')
-               linkedin="Not found"
+               linkedin="Trouble rendering linkedin"
+        driven.save_screenshot('Ldebug.png')
         return linkedin
 
 def email(driven):
@@ -44,11 +59,12 @@ def email(driven):
                   if b.text not in emaillist:
                     emaillist.append(b.text)
         except:
-               emailwebelements="Not found"
+               emailwebelements="Trouble rendering email"
+        driven.save_screenshot('Edebug.png')
         return emaillist
 
 def commonStart(a):
-        a=0
+        b=0
         print("Starting headless browser for link extraction")
         googling_it,your_query=s.search(a)
         driver=udc.Chrome(headless=True,use_subprocess=False,version_main=144)
@@ -77,8 +93,8 @@ def commonStart(a):
                 Num(companynumber=-1).save()
                 QueryStartStat(stat="RESTING").save()
                 return "kill","this","process"
-            a=a+1
-            if a==100:
+            b=b+1
+            if b==100:
                 break
         try:
           finder=driver.find_elements(By.CLASS_NAME,"hfpxzc") #to find all the links once end reached
