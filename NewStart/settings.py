@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -55,8 +56,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
-
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 ROOT_URLCONF = 'NewStart.urls'
 
 TEMPLATES = [
@@ -82,8 +87,12 @@ WSGI_APPLICATION = 'NewStart.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / "db.sqlite3",
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'newstart',
+        'USER': 'Arko',
+        'PASSWORD': 'Thelastships1_',
+        'HOST': 'scrapingdb.clqe0qkwapvo.eu-north-1.rds.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
@@ -132,17 +141,18 @@ NPM_BIN_PATH= r"C:\Program Files\nodejs\npm.cmd"
 
 
 #celery settings
-CELERY_BROKER_URL='redis://127.0.0.1:6379' #Tells Celery to use Redis running locally (127.0.0.1:6379) as the message broker for task queues.
+CELERY_BROKER_URL=os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0') #Tells Celery to use Redis running locally (127.0.0.1:6379) as the message broker for task queues.
 CELERY_ACCEPT_CONTENT=['application/json'] # Celery will only accept tasks serialized in JSON format
 CELERY_RESULT_SERIALIZER='json' #Tasks and results will be encoded/decoded as JSON
 CELERY_TASK_SERIALIZER='json'
 CELERY_TIMEZONE='Asia/Kolkata' # Sets the timezone to India (Kolkata) for task schedules                                       JSON = JavaScript Object Notation – A lightweight format for storing/transferring data (like a Python dict but for all languages).Looks like this: {"name": "Alice", "age": 25, "pets": ["dog", "cat"]} (Keys + values in quotes).
-CELERY_RESULT_BACKEND='django-db'
+CELERY_RESULT_BACKEND=os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
 
 #download button stuff
 MEDIA_URL = '/media/'    ##MEDIA_URL defines the URL path used to access those files in the browser. When someone visits a link starting with /media/, Django knows to fetch the file from MEDIA_ROOT.
 MEDIA_ROOT = BASE_DIR / 'media' ##MEDIA_ROOT defines the physical location on the server where files (like CSVs, images, PDFs) are stored. Here, it means Django will save files inside a folder named media in your project’s base directory.
 
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
 
     ##'ENGINE': 'django.db.backends.postgresql',
       ##  'NAME': 'newstart',
@@ -150,3 +160,6 @@ MEDIA_ROOT = BASE_DIR / 'media' ##MEDIA_ROOT defines the physical location on th
         ##'PASSWORD': 'Thelastships1_',
         ##'HOST': 'scrapingdb.clqe0qkwapvo.eu-north-1.rds.amazonaws.com',
         ##'PORT': '432',
+
+          ##  'ENGINE': 'django.db.backends.sqlite3',
+        ##'NAME': BASE_DIR / "db.sqlite3",

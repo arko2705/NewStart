@@ -1,0 +1,35 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    container_name: gbpscraper_web
+    command: gunicorn NewStart.wsgi:application --bind 0.0.0.0:8000 --workers 1 --worker-class gthread
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+      - celery
+
+  celery:
+    build: .
+    container_name: gbpscraper_celery
+    command: celery -A NewStart worker --loglevel=info
+    volumes:
+      - .:/app
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: gbpscraper_redis
+    ports:
+      - "6379:6379"

@@ -16,7 +16,8 @@ class Logic:
             if i.get_attribute("href") not in link_list:
                 link_list.append(i.get_attribute("href"))
         driver.quit()
-        Num(companynumber=len(link_list)).save()
+        if len(link_list)>0:
+            Num(companynumber=len(link_list)).save()
         return link_list,your_query
        
     def InstanceProvider(self):
@@ -31,6 +32,7 @@ class Logic:
            WebDriverWait(driven, 10).until(
              EC.presence_of_element_located((By.CSS_SELECTOR, ".m6QErb.Pf6ghf.XiKgde.ecceSd.tLjsW"))
         )
+           driven.save_screenshot('Cdebug.png')
            try: 
             CFinder=driven.find_element(By.CSS_SELECTOR, ".m6QErb.Pf6ghf.XiKgde.ecceSd.tLjsW")
             NeedToStrip=CFinder.get_attribute("aria-label")
@@ -41,6 +43,7 @@ class Logic:
            return Company
 
     def address_PhoneNumber(self,driven):#Gotta fix the address logic by a bit
+           driven.save_screenshot('APdebug.png')
            try:   
              AFinder=driven.find_element(By.CLASS_NAME,"CsEnBe")
              #time.sleep(0.1)

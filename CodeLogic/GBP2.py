@@ -16,7 +16,8 @@ class Logic:
                 company_list.append(i.get_attribute("aria-label"))
                 link_list.append(i.get_attribute("href"))
         driver.quit()
-        Num(companynumber=len(link_list)).save()
+        if len(link_list)>0:
+          Num(companynumber=len(link_list)).save()
         return link_list,your_query,company_list
     
     def G_InstanceProvider(self):
@@ -66,7 +67,7 @@ class Logic:
         return emaillist
     
     def linkedin(self,Website,Company,driven):
-        common.commonEL(self,Website,Company,driven,prompt="+linkedin+profile")
+        common.commonEL(self,Website,Company,driven,prompt=" business")
         linkedin=common.linkedin(driven)
         return linkedin
     

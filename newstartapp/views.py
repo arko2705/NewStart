@@ -98,21 +98,27 @@ def datadisplay(request):
 def num(request):
     if UserChoice.objects.last() and UserChoice.objects.last().choice==0:        ##0 indicates they took too long to respond
         return HttpResponse(loader.get_template("toolong.html").render())
-    
-    if Num.objects.last() is not None:  
+    if Num.objects.last() is not None: 
+        print("am i here") 
         if Num.objects.last().companynumber>0:
            context={
             's':"yes",                        ##indicating that we found the number of companies
             'num':Num.objects.last().companynumber        ##model values have to be sent in context,cant be directly accessed by html pages.
            }
+           print("here1")
         elif Num.objects.last().companynumber==-1:   ##-1 indicates that automated tab was closed as it got blocked
            context={
               's':"BotGotDetected"             ##google closed the automated tab
            }
-    else:
-     context={
-        's': "no"
-     }
+        elif Num.objects.last().companynumber==-2: ##-2 indicates that the search was bullshit and no results were found
+           context={
+              's':"no"             ##no results found for the query
+           }
+    else :
+       print("here?????????????????")
+       context={
+          's':"doesnt matter"
+       }
     return HttpResponse(loader.get_template("number.html").render(context))
 
    

@@ -65,13 +65,21 @@
                 {% if x.MapLink != '' %}
                 <td  scope="row" class="px-6 py-4 whitespace-normal break-words max-w-xs">
                     <div class="flex flex-col">
-                    {{ x.MapLink }}
+                        <a href="{{ x.MapLink }}" target="_blank" class="text-blue-600 hover:underline">
+                          {{ x.MapLink }}
+                        </a>
                     </div>
                 </td>
                 {% endif %}
-                 {% if x.Website != '' %}
+                {% if x.Website != '' %}
                 <td class="px-6 py-4">
-                    {{ x.Website }}
+                    {% if x.Website != 'Not present on google business profiles' %}
+                        <a href="{{ x.Website }}" target="_blank" class="text-blue-600 hover:underline">
+                          {{ x.Website }}
+                        </a>
+                    {% else %}
+                        {{ x.Website }}
+                    {% endif %}
                 </td>
                 {% endif %}
                 {% if x.Email != '' %}

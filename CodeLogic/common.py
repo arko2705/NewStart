@@ -1,6 +1,6 @@
 import csv
 from selenium.webdriver.common.by import By
-from CodeLogic import search as s
+from CodeLogic import EdgeCases, search as s
 import undetected_chromedriver as udc
 from newstartapp.models import Num,QueryStartStat,Num1,UserChoice,OutputFile
 from django.core.files import File
@@ -9,24 +9,18 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import random
+from urllib.parse import quote_plus
 ##locators have been used btw
-def commonEL(self,Website,Company,driven,prompt):
+def commonEL(self,Website,Company,driven,prompt): ##special character '&' is messing urls up. Google has its own encoding
         initial_query="https://www.google.com/search?q="
         if prompt !=" business" and Website and Website.startswith("https") and Website.endswith("/"):
-               print("i was here in website")
+               #print("i was here in website")
                iweb=Website[:len(Website)-1]
                fweb=iweb.replace("https://","")
                final_query=initial_query+fweb+prompt
         else:     
-              print("I was here in company")  
-              if '|' in Company:
-                OnlyCompany=Company.split('|')
-                Company_array=OnlyCompany[0].split(' ')
-              else:
-                   Company_array=Company.split(' ')
-              for f in Company_array:
-                 initial_query=initial_query+"+"+f
-              final_query=initial_query+prompt
+              final_query=initial_query+quote_plus(Company)+prompt
+        print(final_query)
         sleep=random.randrange(3,10)
         time.sleep(sleep)
         try:
@@ -44,7 +38,7 @@ def linkedin(driven):
           webelements= driven.find_elements(By.CSS_SELECTOR, "a[href*='linkedin']")
           for x in webelements:
                      linkedin=x.get_attribute("href")
-                     break
+                     break         #breaking cuz the first link is the most accurate one usually
         except:
                driven.save_screenshot('Ldebug.png')
                linkedin="Trouble rendering linkedin"
@@ -64,13 +58,14 @@ def email(driven):
         return emaillist
 
 def commonStart(a):
-        b=0
-        print("Starting headless browser for link extraction")
         googling_it,your_query=s.search(a)
-        driver=udc.Chrome(headless=True,use_subprocess=False,version_main=144)
-        if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="RESTING":
-            driver.quit()
-            return "kill","this","process",
+        #driver=udc.Chrome(headless=True,use_subprocess=False,version_main=144)
+        options = udc.ChromeOptions()
+        options.binary_location = "/usr/bin/chromium"
+        options.add_argument("--headless=new")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
+        driver=udc.Chrome(options=options,use_subprocess=True,version_main=144)##version_main=144
         driver.get(googling_it)
         cond=True
         while cond:
@@ -90,18 +85,25 @@ def commonStart(a):
             try:
                 driver.title   #just to check if driver is alive. Gotta create a "driver is closed" page and find a way to handle it seperately from the spamming requests thingie.
             except:
-                Num(companynumber=-1).save()
-                QueryStartStat(stat="RESTING").save()
+                EdgeCases.model_update(-1,"RESTING")
                 return "kill","this","process"
-            b=b+1
-            if b==100:
-                break
+            try:   ##this one's to just check if some bullshit search query got made that has no results at all
+                 driver.find_element(By.CSS_SELECTOR,".m6QErb.Pf6ghf.XiKgde.ecceSd.tLjsW")
+                 EdgeCases.model_update(-2,"RESTING")   ###means no results found for the query
+                 return "kill","this","process" 
+            except:
+                 pass
+            try:
+                 driver.find_element(By.CSS_SELECTOR,".Q2vNVc.fontHeadlineSmall")
+                 EdgeCases.model_update(-2,"RESTING")  ###means no results found for the query
+                 return "kill","this","process" 
+            except:
+                 pass
         try:
           finder=driver.find_elements(By.CLASS_NAME,"hfpxzc") #to find all the links once end reached
         except:
-           Num(companynumber=-1).save()    ###means captcha is open and we are cooked.
-           QueryStartStat(stat="RESTING").save()
-           return "kill","this","process"            
+           EdgeCases.model_update(-1,"RESTING")    ###means captcha is open and we are cooked.
+           return "kill","this","process"
         return finder,your_query,driver
 
 def commonWait():
@@ -136,6 +138,7 @@ def csv_store(element_list,your_query,headers):
         return obj
 
 def website(driver):
+           driver.save_screenshot('Wdebug.png')
            ProbableWebSites=[]
            WebSite=None                  #new concept here
            try:
