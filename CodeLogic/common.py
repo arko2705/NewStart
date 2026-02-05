@@ -70,14 +70,27 @@ def commonStart(a):
         driver=udc.Chrome(options=options,use_subprocess=True,version_main=144)##version_main=144
         driver.get(googling_it)
         try:
-         driver(driver, 10).until(
+          wait = WebDriverWait(driver, 15)
+          accept_btn = wait.until(
           EC.element_to_be_clickable((
-            By.XPATH,
-            "//button//div[contains(text(),'Godkänn alla')]"
-        ))
-        ).click()
+          By.XPATH,
+          "//button[.//text()[contains(., 'Godkänn alla')]]"
+    ))
+)
+          driver.execute_script("arguments[0].click();", accept_btn)
         except:
-           pass
+            try: 
+                  accept_btn = wait.until(
+                  EC.element_to_be_clickable((
+        By.XPATH,
+        "//*[@role='button' and .//text()[contains(., 'Godkänn alla')]]"
+    ))
+)
+
+                  driver.execute_script("arguments[0].click();", accept_btn)
+            except:
+               pass
+            pass
         cond=True
         while cond:
             try:
