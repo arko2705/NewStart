@@ -10,6 +10,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import random
 from urllib.parse import quote_plus
+from django.conf import settings
+import os
 ##locators have been used btw
 def commonEL(self,Website,Company,driven,prompt): ##special character '&' is messing urls up. Google has its own encoding
         initial_query="https://www.google.com/search?q="
@@ -81,7 +83,7 @@ def commonStart(a):
             except:
                  driver.save_screenshot('ss_debug.png')
                  pass
-            driver.save_screenshot('ss_debug1.png')
+            driver.save_screenshot(os.path.join(settings.MEDIA_ROOT, "outputs", "screenshots", "ss_debug1.png"))
             try:
                 driver.title   #just to check if driver is alive. Gotta create a "driver is closed" page and find a way to handle it seperately from the spamming requests thingie.
             except:

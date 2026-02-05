@@ -26,4 +26,5 @@ urlpatterns = [
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)   ##This line is used only in development to make Django serve uploaded media files (like PDFs, images, CSVs).In deployment different scene
 
 
-
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
