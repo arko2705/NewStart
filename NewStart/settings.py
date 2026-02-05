@@ -138,12 +138,12 @@ NPM_BIN_PATH= r"C:\Program Files\nodejs\npm.cmd"
 
 
 #celery settings
-CELERY_BROKER_URL=os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0') #Tells Celery to use Redis running locally (127.0.0.1:6379) as the message broker for task queues.Initially it goes for celery_broker_url tho
+CELERY_BROKER_URL=os.environ.get('CELERY_BROKER_URL') #Tells Celery to use Redis running locally (127.0.0.1:6379) as the message broker for task queues.Initially it goes for celery_broker_url tho
 CELERY_ACCEPT_CONTENT=['application/json'] # Celery will only accept tasks serialized in JSON format
 CELERY_RESULT_SERIALIZER='json' #Tasks and results will be encoded/decoded as JSON
 CELERY_TASK_SERIALIZER='json'
 CELERY_TIMEZONE='Asia/Kolkata' # Sets the timezone to India (Kolkata) for task schedules                                       JSON = JavaScript Object Notation – A lightweight format for storing/transferring data (like a Python dict but for all languages).Looks like this: {"name": "Alice", "age": 25, "pets": ["dog", "cat"]} (Keys + values in quotes).
-CELERY_RESULT_BACKEND=os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost:6379/0')
+CELERY_RESULT_BACKEND=os.environ.get('CELERY_RESULT_BACKEND')
 
 #download button stuff
 MEDIA_URL = '/media/'    ##MEDIA_URL defines the URL path used to access those files in the browser. When someone visits a link starting with /media/, Django knows to fetch the file from MEDIA_ROOT.
