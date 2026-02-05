@@ -26,9 +26,6 @@ SECRET_KEY = 'django-insecure-=o^6a(*msphyhbzm*vyg-bb%7g%g4fq2h-7tlu5!4#8l^z5*8r
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -141,7 +138,7 @@ NPM_BIN_PATH= r"C:\Program Files\nodejs\npm.cmd"
 
 
 #celery settings
-CELERY_BROKER_URL=os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0') #Tells Celery to use Redis running locally (127.0.0.1:6379) as the message broker for task queues.
+CELERY_BROKER_URL=os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/0') #Tells Celery to use Redis running locally (127.0.0.1:6379) as the message broker for task queues.Initially it goes for celery_broker_url tho
 CELERY_ACCEPT_CONTENT=['application/json'] # Celery will only accept tasks serialized in JSON format
 CELERY_RESULT_SERIALIZER='json' #Tasks and results will be encoded/decoded as JSON
 CELERY_TASK_SERIALIZER='json'
@@ -152,8 +149,8 @@ CELERY_RESULT_BACKEND=os.environ.get('CELERY_RESULT_BACKEND', 'redis://localhost
 MEDIA_URL = '/media/'    ##MEDIA_URL defines the URL path used to access those files in the browser. When someone visits a link starting with /media/, Django knows to fetch the file from MEDIA_ROOT.
 MEDIA_ROOT = BASE_DIR / 'media' ##MEDIA_ROOT defines the physical location on the server where files (like CSVs, images, PDFs) are stored. Here, it means Django will save files inside a folder named media in your project’s base directory.
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
-
+##ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "127.0.0.1,16.170.170.187").split(",") ##getting it to read from the environment(nano .env file)
+ALLOWED_HOSTS = ["*"]
     ##'ENGINE': 'django.db.backends.postgresql',
       ##  'NAME': 'newstart',
         ##'USER': 'Arko',

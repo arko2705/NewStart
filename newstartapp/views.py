@@ -35,9 +35,9 @@ def q(request):
         ProcStat(stat=1).save()   #saving user choices,yeah renamed the model badly.sorry abt that
     elif choice=="OP-2":
         ProcStat(stat=2).save()
-    return HttpResponse(loader.get_template('Search1.html').render(context)) 
+    return HttpResponse(loader.get_template('search1.html').render(context)) 
  except:
-    return HttpResponse(loader.get_template('Error.html').render())
+    return HttpResponse(loader.get_template('error.html').render())
 
 def loading(request):
   if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="STARTED":
@@ -58,7 +58,7 @@ def loading(request):
     return HttpResponse(loader.get_template('loader.html').render())
 
   except:
-    return HttpResponse(loader.get_template('Error.html').render())
+    return HttpResponse(loader.get_template('error.html').render())
 
 def datadisplay(request):
     if QueryStartStat.objects.last() and QueryStartStat.objects.last().stat=="TOOLONG":
@@ -92,7 +92,7 @@ def datadisplay(request):
      return HttpResponse(loader.get_template('display.html').render(context,request))
           
     except :
-        return HttpResponse(loader.get_template('Error.html').render())
+        return HttpResponse(loader.get_template('error.html').render())
 
 
 def num(request):

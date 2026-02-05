@@ -32,7 +32,7 @@ class Logic:
            WebDriverWait(driven, 10).until(
              EC.presence_of_element_located((By.CSS_SELECTOR, ".m6QErb.Pf6ghf.XiKgde.ecceSd.tLjsW"))
         )
-           driven.save_screenshot('Cdebug.png')
+           driven.save_screenshot('ss_Cdebug.png')
            try: 
             CFinder=driven.find_element(By.CSS_SELECTOR, ".m6QErb.Pf6ghf.XiKgde.ecceSd.tLjsW")
             NeedToStrip=CFinder.get_attribute("aria-label")
@@ -43,7 +43,7 @@ class Logic:
            return Company
 
     def address_PhoneNumber(self,driven):#Gotta fix the address logic by a bit
-           driven.save_screenshot('APdebug.png')
+           driven.save_screenshot('ss_APdebug.png')
            try:   
              AFinder=driven.find_element(By.CLASS_NAME,"CsEnBe")
              #time.sleep(0.1)

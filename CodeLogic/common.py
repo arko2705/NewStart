@@ -40,9 +40,9 @@ def linkedin(driven):
                      linkedin=x.get_attribute("href")
                      break         #breaking cuz the first link is the most accurate one usually
         except:
-               driven.save_screenshot('Ldebug.png')
+               driven.save_screenshot('ss_Ldebug.png')
                linkedin="Trouble rendering linkedin"
-        driven.save_screenshot('Ldebug.png')
+        driven.save_screenshot('ss_Ldebug.png')
         return linkedin
 
 def email(driven):
@@ -54,7 +54,7 @@ def email(driven):
                     emaillist.append(b.text)
         except:
                emailwebelements="Trouble rendering email"
-        driven.save_screenshot('Edebug.png')
+        driven.save_screenshot('ss_Edebug.png')
         return emaillist
 
 def commonStart(a):
@@ -79,9 +79,9 @@ def commonStart(a):
               panel.send_keys(Keys.PAGE_DOWN)
               time.sleep(0.05)
             except:
-                 driver.save_screenshot('debug.png')
+                 driver.save_screenshot('ss_debug.png')
                  pass
-            driver.save_screenshot('debug1.png')
+            driver.save_screenshot('ss_debug1.png')
             try:
                 driver.title   #just to check if driver is alive. Gotta create a "driver is closed" page and find a way to handle it seperately from the spamming requests thingie.
             except:
@@ -138,7 +138,7 @@ def csv_store(element_list,your_query,headers):
         return obj
 
 def website(driver):
-           driver.save_screenshot('Wdebug.png')
+           driver.save_screenshot('ss_Wdebug.png')
            ProbableWebSites=[]
            WebSite=None                  #new concept here
            try:
