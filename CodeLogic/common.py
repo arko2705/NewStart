@@ -69,6 +69,15 @@ def commonStart(a):
         options.add_argument("--disable-dev-shm-usage")
         driver=udc.Chrome(options=options,use_subprocess=True,version_main=144)##version_main=144
         driver.get(googling_it)
+        try:
+         driver(driver, 10).until(
+          EC.element_to_be_clickable((
+            By.XPATH,
+            "//button//div[contains(text(),'Godkänn alla')]"
+        ))
+        ).click()
+        except:
+           pass
         cond=True
         while cond:
             try:
