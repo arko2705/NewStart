@@ -128,11 +128,13 @@ def commonStart(a):
             time.sleep(1)
             if z==60:
                 break
+            print(z)
         try:
           finder=driver.find_elements(By.CLASS_NAME,"hfpxzc") #to find all the links once end reached
         except:
            EdgeCases.model_update(-1,"RESTING")    ###means captcha is open and we are cooked.
            return "kill","this","process"
+        
         return finder,your_query,driver
 
 def commonWait():
