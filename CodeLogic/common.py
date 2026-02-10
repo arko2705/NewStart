@@ -69,28 +69,6 @@ def commonStart(a):
         options.add_argument("--disable-dev-shm-usage")
         driver=udc.Chrome(options=options,use_subprocess=True,version_main=144)##version_main=144
         driver.get(googling_it)
-        try:
-          wait = WebDriverWait(driver, 15)
-          accept_btn = wait.until(
-          EC.element_to_be_clickable((
-          By.XPATH,
-          "//button[.//text()[contains(., 'Godkänn alla')]]"
-    ))
-)
-          driver.execute_script("arguments[0].click();", accept_btn)
-        except:
-            try: 
-                  accept_btn = wait.until(
-                  EC.element_to_be_clickable((
-        By.XPATH,
-        "//*[@role='button' and .//text()[contains(., 'Godkänn alla')]]"
-    ))
-)
-
-                  driver.execute_script("arguments[0].click();", accept_btn)
-            except:
-               pass
-            pass
         cond=True
         z=0
         while cond:
@@ -104,7 +82,7 @@ def commonStart(a):
               panel.send_keys(Keys.PAGE_DOWN)
               time.sleep(0.05)
             except:
-                 driver.save_screenshot('ss_debug.png')
+                 driver.save_screenshot(os.path.join(settings.MEDIA_ROOT, "outputs", "screenshots", "ss_debug.png"))
                  pass
             driver.save_screenshot(os.path.join(settings.MEDIA_ROOT, "outputs", "screenshots", "ss_debug1.png"))
             try:
