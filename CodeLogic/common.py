@@ -92,6 +92,7 @@ def commonStart(a):
                pass
             pass
         cond=True
+        z=0
         while cond:
             try:
                 driver.find_element(By.CLASS_NAME,"HlvSq")#to indicate end to it all
@@ -123,6 +124,10 @@ def commonStart(a):
                  return "kill","this","process" 
             except:
                  pass
+            z=z+1
+            time.sleep(1)
+            if z==60:
+                break
         try:
           finder=driver.find_elements(By.CLASS_NAME,"hfpxzc") #to find all the links once end reached
         except:
